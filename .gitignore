@@ -1,0 +1,5 @@
+# Ignorar la carpeta Oracle_JDK-22
+Oracle_JDK-22/
+
+# Ignorar la carpeta target
+target/
