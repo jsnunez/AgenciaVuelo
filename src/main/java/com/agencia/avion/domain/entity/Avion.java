@@ -22,6 +22,10 @@ public class Avion {
     }
 
 
+    public Avion() {
+    }
+
+
     public int getId() {
         return id;
     }
