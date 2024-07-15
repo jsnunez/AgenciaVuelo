@@ -8,6 +8,9 @@ import com.agencia.avion.application.UpdateAvionUseCase;
 import com.agencia.avion.domain.entity.Avion;
 import com.agencia.avion.infraestructure.AvionController;
 import com.agencia.avion.infraestructure.AvionRepository;
+import com.agencia.escala.application.FindEscalaUseCase;
+import com.agencia.escala.infraestructure.EscalaController;
+import com.agencia.escala.infraestructure.EscalaRepository;
 
 public class Main {
     @SuppressWarnings("unused")
@@ -19,11 +22,18 @@ public class Main {
         DeleteAvionUseCase deleteAvionUseCase = new DeleteAvionUseCase(avionRepository);
         UpdateAvionUseCase updateAvionUseCase = new UpdateAvionUseCase(avionRepository);
 
+        EscalaRepository escalaRepository = new EscalaRepository();
+        FindEscalaUseCase findEscalaUseCase = new FindEscalaUseCase(escalaRepository);
+
+        EscalaController escalaController = new EscalaController(findEscalaUseCase);
+
         AvionController avionController = new AvionController(createAvionUseCase, updateAvionUseCase, deleteAvionUseCase, findAvionUseCase);
         
         while (true) {
             System.out.println("1. Gestion Avión");
-            System.out.println("2. Salir");
+            System.out.println("3. Gestion Escala");
+
+            System.out.println("5. Salir");
             int opcion = scanner.nextInt();
             scanner.nextLine(); // Consumir el salto de línea después de nextInt
             
@@ -34,8 +44,14 @@ public class Main {
 
                     break;
 
+                case 3:
+
+                    escalaController.findEscalas();
+
+                    break;
+
                     
-                case 2:
+                case 5:
                     System.out.println("Saliendo...");
                     scanner.close();
                     System.exit(0);
