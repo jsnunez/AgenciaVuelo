@@ -186,7 +186,7 @@ public class AvionController {
             System.out.println("Avion id Aerolínea: " + foundAvion.getIdAerolinea());
         }
         else{
-            System.out.println("Avión not found");
+            System.out.println("Avión no encontrado c:");
         }
 
     }
