@@ -5,7 +5,7 @@ import com.agencia.avion.application.CreateAvionUseCase;
 import com.agencia.avion.application.DeleteAvionUseCase;
 import com.agencia.avion.application.FindAvionUseCase;
 import com.agencia.avion.application.UpdateAvionUseCase;
-//import com.agencia.avion.domain.entity.Avion;
+import com.agencia.avion.domain.entity.Avion;
 import com.agencia.avion.infraestructure.AvionController;
 import com.agencia.avion.infraestructure.AvionRepository;
 import com.agencia.trayecto.application.FindTrayectoUseCase;
@@ -22,7 +22,6 @@ public class Main {
         CreateAvionUseCase createAvionUseCase = new CreateAvionUseCase(avionRepository);
         DeleteAvionUseCase deleteAvionUseCase = new DeleteAvionUseCase(avionRepository);
         UpdateAvionUseCase updateAvionUseCase = new UpdateAvionUseCase(avionRepository);
-
         AvionController avionController = new AvionController(createAvionUseCase, updateAvionUseCase, deleteAvionUseCase, findAvionUseCase);
 
         FindTrayectoUseCase findTrayectoUseCase = new FindTrayectoUseCase(trayectoRepository);
@@ -30,7 +29,7 @@ public class Main {
         
         while (true) {
             System.out.println("1. Gestion Avión");
-            System.out.println("2. Salir");
+            System.out.println("2. Gestion Trayectos");
             int opcion = scanner.nextInt();
             scanner.nextLine(); // Consumir el salto de línea después de nextInt
             
@@ -41,8 +40,13 @@ public class Main {
 
                     break;
 
+                case 2: 
+                
+                    trayectoController.gestionTrayecto();
                     
-                case 2:
+
+                case 3:
+
                     System.out.println("Saliendo...");
                     scanner.close();
                     System.exit(0);
