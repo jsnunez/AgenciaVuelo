@@ -13,6 +13,7 @@ import com.agencia.escala.application.UpdateEscalaUseCase;
 import com.agencia.escala.infraestructure.EscalaController;
 import com.agencia.escala.infraestructure.EscalaRepository;
 import com.agencia.tipoDocumento.application.CreateTipoDocumentoUseCase;
+import com.agencia.tipoDocumento.application.DeleteTipoDocumentoUseCase;
 import com.agencia.tipoDocumento.application.UpdateTipoDocumentoUseCase;
 import com.agencia.tipoDocumento.infraestructure.TipoDocumentoController;
 import com.agencia.tipoDocumento.infraestructure.TipoDocumentoRepository;
@@ -43,8 +44,9 @@ public class Main {
 
         CreateTipoDocumentoUseCase createTipoDocumentoUseCase=new CreateTipoDocumentoUseCase(tipoDocumentoRepository);
         UpdateTipoDocumentoUseCase updateTipoDocumentoUseCase=new UpdateTipoDocumentoUseCase(tipoDocumentoRepository);
+        DeleteTipoDocumentoUseCase deleteTipoDocumentoUseCase=new DeleteTipoDocumentoUseCase(tipoDocumentoRepository);
 
-        TipoDocumentoController tipoDocumentoController=new TipoDocumentoController(createTipoDocumentoUseCase,updateTipoDocumentoUseCase);
+        TipoDocumentoController tipoDocumentoController=new TipoDocumentoController(createTipoDocumentoUseCase,updateTipoDocumentoUseCase,deleteTipoDocumentoUseCase);
         
         while (true) {
             System.out.println("1. Gestion Avión");
