@@ -11,6 +11,7 @@ import com.agencia.tarifa.application.UpdateTarifaUseCase;
 import com.agencia.tarifa.domain.service.TarifaService;
 import com.agencia.tarifa.infraestructure.in.TarifaController;
 import com.agencia.tarifa.infraestructure.out.TarifaRepository;
+import com.agencia.vuelo.application.BuscarVueloUseCase;
 import com.agencia.vuelo.application.ConsultvueloUseCase;
 import com.agencia.vuelo.domain.service.vueloService;
 import com.agencia.vuelo.infraestructure.in.vueloController;
@@ -77,7 +78,8 @@ public class mainsebastian {
                 case 1:
                     vueloService vueloService = new vueloRepository();
                     ConsultvueloUseCase consultvueloUseCase =  new ConsultvueloUseCase(vueloService);
-                    vueloController consoleAdapterVuelo = new vueloController(consultvueloUseCase);
+                    BuscarVueloUseCase buscarVueloUseCase = new BuscarVueloUseCase(vueloService);
+                    vueloController consoleAdapterVuelo = new vueloController(consultvueloUseCase,buscarVueloUseCase);
 
                     Object[] optionsVuelos = { "Consultar vuelos", "Buscar vuelo", "Seleccionar vuelo",
                             "Añadir pasajero", "Seleccionar asiento", " Salir" };
@@ -97,7 +99,7 @@ public class mainsebastian {
                             consoleAdapterVuelo.consultar();
                             break;
                         case 1:
-                            // consoleAdapter.buscar();
+                        consoleAdapterVuelo.buscar();
                             break;
                         case 2:
                             // consoleAdapter.actualizar();

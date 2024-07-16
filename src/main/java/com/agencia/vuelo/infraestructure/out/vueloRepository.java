@@ -5,13 +5,26 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
+import java.math.BigDecimal;
 
+import com.agencia.vuelo.domain.entity.BuscarVuelo;
+import com.agencia.vuelo.domain.entity.Ciudad;
 import com.agencia.vuelo.domain.entity.VuelosDto;
 import com.agencia.vuelo.domain.entity.vuelo;
 import com.agencia.vuelo.domain.service.vueloService;
+import com.toedter.calendar.JCalendar;
 
 public class vueloRepository implements vueloService {
 
@@ -115,4 +128,132 @@ JOptionPane.showMessageDialog(null, "vuelo encontrada: \n" +
         }
         
 
-}}
+}
+
+  @Override
+  public void BuscarVuelo(List<Ciudad> ciudades) {
+    List<String> nombres = new ArrayList<>();
+    for (Ciudad ciudad : ciudades) {
+        nombres.add(ciudad.getCiudad());
+    }
+
+    JComboBox<String> comboBoxCiudadesorigen = new JComboBox<>(nombres.toArray(new String[0]));
+    JComboBox<String> comboBoxCiudadesdestino = new JComboBox<>(nombres.toArray(new String[0]));
+
+    JPanel panel = new JPanel(new GridLayout(0, 2));
+    panel.add(new JLabel("Seleccione una ciudad origen:"));
+    panel.add(comboBoxCiudadesorigen);
+    panel.add(new JLabel("Seleccione una ciudad destino:"));
+    panel.add(comboBoxCiudadesdestino);
+
+    int result = JOptionPane.showConfirmDialog(null, panel, "Seleccionar Ciudad origen y destino", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+    if (result == JOptionPane.OK_OPTION) {
+        String selectedCiudadorigen = (String) comboBoxCiudadesorigen.getSelectedItem();
+        String selectedCiudaddestino = (String) comboBoxCiudadesdestino.getSelectedItem();
+        System.out.println("Ciudad origen seleccionada: " + selectedCiudadorigen);
+        System.out.println("Ciudad destino seleccionada: " + selectedCiudaddestino);
+
+        JCalendar calendar = new JCalendar();
+        JPanel panelc = new JPanel(new GridLayout(0, 2));
+        panelc.add(new JLabel("Seleccione una fecha:"));
+        panelc.add(calendar);
+
+        int resultc = JOptionPane.showConfirmDialog(null, panelc, "Seleccionar Fecha", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (resultc == JOptionPane.OK_OPTION) {
+            Date selectedDate = calendar.getDate();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(selectedDate);
+            int dia = cal.get(Calendar.DAY_OF_MONTH);
+            int mes = cal.get(Calendar.MONTH) + 1; // Los meses comienzan en 0 en Calendar, por lo que se añade 1
+            int año = cal.get(Calendar.YEAR);
+            String fechaida= año+"-"+mes+"-"+dia;
+            System.out.println(fechaida);
+
+            String idAeropuertoOrigen = obtenerIdAeropuerto(selectedCiudadorigen);
+            String idAeropuertoDestino = obtenerIdAeropuerto(selectedCiudaddestino);
+
+            System.out.println("ID Aeropuerto Origen: " + idAeropuertoOrigen);
+            System.out.println("ID Aeropuerto Destino: " + idAeropuertoDestino);
+
+BuscarVuelo bvuelo= new BuscarVuelo(fechaida,idAeropuertoOrigen,idAeropuertoDestino);
+vuelofecha(bvuelo);
+
+        } else {
+            System.out.println("Selección de fecha cancelada");
+        }
+    } else {
+        System.out.println("Selección de ciudades cancelada");
+    }
+}
+  private void vuelofecha(BuscarVuelo bvuelo) {
+     System.out.println(bvuelo.getIdAeropuertoDestino());
+     System.out.println(bvuelo.getIdAeropuertoOrigen());
+
+      String sql = "SELECT id,precioviaje from viajes v WHERE fechaviaje = ? AND  idorigenaeropuerto=? AND  iddestinoaeropuerto =?";
+      try (PreparedStatement statement = connection.prepareStatement(sql)) {
+          statement.setString(1, bvuelo.getFechaIda());
+          statement.setString(2, bvuelo.getIdAeropuertoOrigen());
+          statement.setString(3, bvuelo.getIdAeropuertoDestino());
+    
+          try (ResultSet resultSet = statement.executeQuery()) {
+              if (resultSet.next()) {
+                 int id = resultSet.getInt("id");
+                 BigDecimal precio = resultSet.getBigDecimal("precioviaje");
+                 JOptionPane.showMessageDialog(null, "vuelo encontrada:" +id +" \n" +
+                 "Fecha: " + bvuelo.getFechaIda() + "\n" +
+                 "Precio: " + precio + "\n" +
+                 "Aeropuerto Origen: " +bvuelo.getIdAeropuertoOrigen() + "\n" +
+                 "Aeropuerto Destino: " +bvuelo.getIdAeropuertoDestino() + "\n" 
+                 );
+                 
+              }else{
+                 JOptionPane.showMessageDialog(null, " no se encontro vuelo" );
+              }
+          }
+          
+      } catch (SQLException e) {
+          e.printStackTrace();
+      }
+     
+  }
+
+    private String obtenerIdAeropuerto(String nombreCiudad) {
+      String idAeropuerto = null;
+      String sql = "SELECT a.id FROM aeropuertos a JOIN ciudades c ON c.id = a.idciudad WHERE c.nombre = ?";
+      try (PreparedStatement statement = connection.prepareStatement(sql)) {
+          statement.setString(1, nombreCiudad);
+          try (ResultSet resultSet = statement.executeQuery()) {
+              if (resultSet.next()) {
+                  idAeropuerto = resultSet.getString("id");
+              }
+          }
+      } catch (SQLException e) {
+          e.printStackTrace();
+      }
+      return idAeropuerto;
+  }
+
+  @Override
+  public List<Ciudad> findAllCiudades() {
+    List<Ciudad> ciudades = new ArrayList<>();
+    String sql = "SELECT id, nombre FROM ciudades";
+    
+    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                Ciudad ciudad = new Ciudad();
+                ciudad.setId(resultSet.getString("id"));
+                ciudad.setCiudad(resultSet.getString("nombre"));
+                ciudades.add(ciudad);
+                System.out.println(ciudad.getCiudad());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    
+    return ciudades;
+}  }
+
