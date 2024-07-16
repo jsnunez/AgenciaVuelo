@@ -38,14 +38,14 @@ public class TipoDocumentoRepository implements TipoDocumentoService {
             PreparedStatement ps=connection.prepareStatement(query,
             PreparedStatement.RETURN_GENERATED_KEYS);
 
-            ps.setString(2,tipoDocumento.getNombre());
+            ps.setString(1,tipoDocumento.getNombre());
 
-            ps.execute();
+            ps.executeUpdate();
             System.out.println("Tipo documento creado con exito!!");
 
-            try (ResultSet generatedSet=ps.getGeneratedKeys()){
-                if (generatedSet.next()) {
-                    int id = generatedSet.getInt(1);
+            try (ResultSet generatedkeys=ps.getGeneratedKeys()){
+                if (generatedkeys.next()) {
+                    int id = generatedkeys.getInt(1);
                     tipoDocumento.setId(id);
                 }
                 
