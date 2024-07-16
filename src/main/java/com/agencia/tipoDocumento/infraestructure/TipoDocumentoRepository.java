@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Properties;
 
 import com.agencia.tipoDocumento.domain.entity.TipoDocumento;
@@ -75,15 +76,28 @@ public class TipoDocumentoRepository implements TipoDocumentoService {
       }
     }
 
+     @Override
+    public void deleteTipoDocumento(TipoDocumento tipoDocumento){
+        String query ="DELETE  FROM tiposdocumentos WHERE id=? ";
+        try (PreparedStatement ps=connection.prepareStatement(query)){
+            ps.setInt(1,tipoDocumento.getId());
+            ps.executeUpdate();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+        
+
+       
+    }
+
     // @Override
     // public TipoDocumentoService tipoDocumento(int id) {
       
     // }
 
-    // @Override
-    // public void deleteTipoDocumento(TipoDocumentoService tipoDocumento) {
-       
-    // }
+   
 
 
 }
