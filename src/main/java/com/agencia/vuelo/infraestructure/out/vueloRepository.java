@@ -188,28 +188,46 @@ vuelofecha(bvuelo);
   private void vuelofecha(BuscarVuelo bvuelo) {
      System.out.println(bvuelo.getIdAeropuertoDestino());
      System.out.println(bvuelo.getIdAeropuertoOrigen());
-
-      String sql = "SELECT id,precioviaje from viajes v WHERE fechaviaje = ? AND  idorigenaeropuerto=? AND  iddestinoaeropuerto =?";
-      try (PreparedStatement statement = connection.prepareStatement(sql)) {
-          statement.setString(1, bvuelo.getFechaIda());
-          statement.setString(2, bvuelo.getIdAeropuertoOrigen());
-          statement.setString(3, bvuelo.getIdAeropuertoDestino());
-    
-          try (ResultSet resultSet = statement.executeQuery()) {
-              if (resultSet.next()) {
-                 int id = resultSet.getInt("id");
-                 BigDecimal precio = resultSet.getBigDecimal("precioviaje");
-                 JOptionPane.showMessageDialog(null, "vuelo encontrada:" +id +" \n" +
-                 "Fecha: " + bvuelo.getFechaIda() + "\n" +
-                 "Precio: " + precio + "\n" +
-                 "Aeropuerto Origen: " +bvuelo.getIdAeropuertoOrigen() + "\n" +
-                 "Aeropuerto Destino: " +bvuelo.getIdAeropuertoDestino() + "\n" 
-                 );
+     List<String> vuelos = new ArrayList<>();
+      String sql = "SELECT id,precioviaje,fechaviaje from viajes v WHERE fechaviaje = ? AND  idorigenaeropuerto=? AND  iddestinoaeropuerto =?";
+   
+        
+          try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, bvuelo.getFechaIda());
+            statement.setString(2, bvuelo.getIdAeropuertoOrigen());
+            statement.setString(3, bvuelo.getIdAeropuertoDestino());
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                  vuelos.add(resultSet.getString("id"));
+                  
                  
-              }else{
-                 JOptionPane.showMessageDialog(null, " no se encontro vuelo" );
-              }
-          }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            System.out.println(vuelos);
+            JComboBox<String> comboBoxVuelos = new JComboBox<>(vuelos.toArray(new String[0]));
+
+            JPanel panel = new JPanel(new GridLayout(0, 2));
+            panel.add(new JLabel("Seleccione Vuelo:"));
+            panel.add(comboBoxVuelos);
+
+            int result = JOptionPane.showConfirmDialog(null, panel, "Seleccionar vuelo", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+          // try (ResultSet resultSet = statement.executeQuery()) {
+          //     if (resultSet.next()) {
+          //        int id = resultSet.getInt("id");
+          //        BigDecimal precio = resultSet.getBigDecimal("precioviaje");
+          //        JOptionPane.showMessageDialog(null, "vuelo encontrada:" +id +" \n" +
+          //        "Fecha: " + bvuelo.getFechaIda() + "\n" +
+          //        "Precio: " + precio + "\n" +
+          //        "Aeropuerto Origen: " +bvuelo.getIdAeropuertoOrigen() + "\n" +
+          //        "Aeropuerto Destino: " +bvuelo.getIdAeropuertoDestino() + "\n" 
+          //        );
+                 
+          //     }else{
+          //        JOptionPane.showMessageDialog(null, " no se encontro vuelo" );
+          //     }
+          // }
           
       } catch (SQLException e) {
           e.printStackTrace();
