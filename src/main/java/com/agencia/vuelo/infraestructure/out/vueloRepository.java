@@ -212,7 +212,7 @@ public class vueloRepository implements vueloService {
 
       int resultVuelo = JOptionPane.showConfirmDialog(null, panel, "Seleccionar vuelo", JOptionPane.OK_CANCEL_OPTION,
           JOptionPane.PLAIN_MESSAGE);
-          String selectVuelo;
+          String selectVuelo="0";
           if (resultVuelo == JOptionPane.OK_OPTION) {
              selectVuelo = (String) comboBoxVuelos.getSelectedItem();
              System.out.println(selectVuelo);
@@ -236,7 +236,7 @@ public class vueloRepository implements vueloService {
         PreparedStatement ps = connection.prepareStatement(query,
             PreparedStatement.RETURN_GENERATED_KEYS);
         ps.setString(1,  bvuelo.getFechaIda());
-        ps.setInt(2, 1);
+        ps.setInt(2, Integer.parseInt(selectVuelo));
         ps.setInt(3,1);
         ps.setString(4,"reservado");
 
@@ -314,6 +314,8 @@ public class vueloRepository implements vueloService {
     }
     Pasajero pasajero = new Pasajero(nombreField.getText(), edadInt, selectedTipoDocumento, documentoField.getText());
 
+
+    
   }
 
   private String obtenerIdAeropuerto(String nombreCiudad) {
