@@ -5,9 +5,9 @@ import com.agencia.avion.application.CreateAvionUseCase;
 import com.agencia.avion.application.DeleteAvionUseCase;
 import com.agencia.avion.application.FindAvionUseCase;
 import com.agencia.avion.application.UpdateAvionUseCase;
-import com.agencia.avion.domain.entity.Avion;
 import com.agencia.avion.infraestructure.AvionController;
 import com.agencia.avion.infraestructure.AvionRepository;
+import com.agencia.escala.application.DeleteEscalaUseCase;
 import com.agencia.escala.application.FindEscalaUseCase;
 import com.agencia.escala.application.UpdateEscalaUseCase;
 import com.agencia.escala.infraestructure.EscalaController;
@@ -32,12 +32,12 @@ public class Main {
         CreateAvionUseCase createAvionUseCase = new CreateAvionUseCase(avionRepository);
         DeleteAvionUseCase deleteAvionUseCase = new DeleteAvionUseCase(avionRepository);
         UpdateAvionUseCase updateAvionUseCase = new UpdateAvionUseCase(avionRepository);
-        AvionController avionController = new AvionController(createAvionUseCase, updateAvionUseCase, deleteAvionUseCase, findAvionUseCase);
-
         FindEscalaUseCase findEscalaUseCase = new FindEscalaUseCase(escalaRepository);
         UpdateEscalaUseCase updateEscalaUseCase = new UpdateEscalaUseCase(escalaRepository);
+        DeleteEscalaUseCase deleteEscalaUseCase = new DeleteEscalaUseCase(escalaRepository);
 
-        EscalaController escalaController = new EscalaController(findEscalaUseCase, updateEscalaUseCase);
+        AvionController avionController = new AvionController(createAvionUseCase, updateAvionUseCase, deleteAvionUseCase, findAvionUseCase);
+        EscalaController escalaController = new EscalaController(findEscalaUseCase, updateEscalaUseCase, deleteEscalaUseCase);
         FindTrayectoUseCase findTrayectoUseCase = new FindTrayectoUseCase(trayectoRepository);
         TrayectoController trayectoController = new TrayectoController(findTrayectoUseCase);
 

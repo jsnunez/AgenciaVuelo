@@ -78,5 +78,22 @@ public class EscalaRepository implements EscalaService{
 
    }
 
+    @Override
+    public Escala deleteEscala(int id) {
+
+        String query = "Delete FROM conexionesvuelos WHERE id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
+
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
 

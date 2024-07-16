@@ -6,5 +6,6 @@ public interface EscalaService {
 
     Escala findEscala(int idViaje);
     void updateEscala(Escala escala);
+    Escala deleteEscala(int id);
 
 }
