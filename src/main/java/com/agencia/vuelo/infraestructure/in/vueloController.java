@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 import com.agencia.vuelo.application.ConsultvueloUseCase;
-import com.agencia.vuelo.application.DeletevueloUseCase;
+import com.agencia.vuelo.application.BuscarVueloUseCase;
 import com.agencia.vuelo.application.FindvueloUseCase;
 import com.agencia.vuelo.application.UpdatevueloUseCase;
 import com.agencia.vuelo.domain.entity.VuelosDto;
@@ -15,15 +15,22 @@ import com.agencia.vuelo.domain.entity.vuelo;
 public class vueloController {
     private ConsultvueloUseCase consultvueloUseCase;
     private FindvueloUseCase findvueloUseCase;
-    private DeletevueloUseCase deletevueloUseCase;
+    private BuscarVueloUseCase deletevueloUseCase;
     private UpdatevueloUseCase updatevueloUseCase;
+    private BuscarVueloUseCase buscarVueloUseCase;
 
     public vueloController(ConsultvueloUseCase consultvueloUseCase, FindvueloUseCase findvueloUseCase,
-            DeletevueloUseCase deletevueloUseCase, UpdatevueloUseCase updatevueloUseCase) {
+            BuscarVueloUseCase deletevueloUseCase, UpdatevueloUseCase updatevueloUseCase, BuscarVueloUseCase buscarVueloUseCase) {
         this.consultvueloUseCase = consultvueloUseCase;
         this.findvueloUseCase = findvueloUseCase;
         this.deletevueloUseCase = deletevueloUseCase;
         this.updatevueloUseCase = updatevueloUseCase;
+        this.buscarVueloUseCase = buscarVueloUseCase;
+    }
+
+    public vueloController(ConsultvueloUseCase consultvueloUseCase, BuscarVueloUseCase buscarVueloUseCase) {
+        this.consultvueloUseCase = consultvueloUseCase;
+        this.buscarVueloUseCase = buscarVueloUseCase;
     }
 
     public vueloController(ConsultvueloUseCase consultvueloUseCase) {
@@ -41,11 +48,8 @@ public class vueloController {
     }
 
     public void buscar() throws SQLException {
-        String idString = JOptionPane.showInputDialog("Ingrese ID vuelo");
-        int id = Integer.parseInt(idString);
-        vuelo vuelo = new vuelo();
-        vuelo = findvueloUseCase.execute(id);
-        System.out.println("Id: " + vuelo.getId());
+
+        buscarVueloUseCase.execute(0);
 
     }
 
