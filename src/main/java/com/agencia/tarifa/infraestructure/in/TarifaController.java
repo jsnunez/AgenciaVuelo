@@ -49,6 +49,7 @@ public class TarifaController {
         String idString = JOptionPane.showInputDialog("Ingrese descripcion");
         int id = Integer.parseInt(idString);
         Tarifa tarifa = new Tarifa();
+        
         tarifa = findTarifaUseCase.execute(id);
         System.out.println("Id: " + tarifa.getId());
         System.out.println("Detalle: " + tarifa.getDetalles());
