@@ -66,6 +66,7 @@ public class TipoDocumentoRepository implements TipoDocumentoService {
       try (PreparedStatement ps=connection.prepareStatement(query)){
 
         ps.setString(1, tipoDocumento.getNombre());
+        ps.setInt(2, tipoDocumento.getId());
         ps.executeUpdate();
         System.out.println("Tipo documento actualizado con éxito");
       }
