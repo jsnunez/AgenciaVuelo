@@ -3,6 +3,7 @@ package com.agencia.tipoDocumento.infraestructure;
 import java.util.Scanner;
 
 import com.agencia.tipoDocumento.application.CreateTipoDocumentoUseCase;
+import com.agencia.tipoDocumento.application.DeleteTipoDocumentoUseCase;
 import com.agencia.tipoDocumento.application.UpdateTipoDocumentoUseCase;
 import com.agencia.tipoDocumento.domain.entity.TipoDocumento;
 
@@ -10,10 +11,13 @@ public class TipoDocumentoController {
 
     private final CreateTipoDocumentoUseCase createTipoDocumentoUseCase;
     private final UpdateTipoDocumentoUseCase updateTipoDocumentoUseCase;
+    private final DeleteTipoDocumentoUseCase deleteTipoDocumentoUseCase;
 
-    public TipoDocumentoController(CreateTipoDocumentoUseCase createTipoDocumentoUseCase, UpdateTipoDocumentoUseCase updateTipoDocumentoUseCase ) {
+    public TipoDocumentoController(CreateTipoDocumentoUseCase createTipoDocumentoUseCase, UpdateTipoDocumentoUseCase updateTipoDocumentoUseCase,
+    DeleteTipoDocumentoUseCase deleteTipoDocumentoUseCase) {
         this.createTipoDocumentoUseCase = createTipoDocumentoUseCase;
         this.updateTipoDocumentoUseCase = updateTipoDocumentoUseCase;
+        this.deleteTipoDocumentoUseCase=deleteTipoDocumentoUseCase;
     }
     
 
@@ -22,8 +26,8 @@ public class TipoDocumentoController {
     public void gestionTipoDocumento() {
         while (true) {
             System.out.println("1. crear tipo documento");
-            System.out.println("2. Eliminar tipo documento");
-            System.out.println("3. Modificar tipo documento");
+            System.out.println("2. Modificar tipo documento");
+            System.out.println("3. Eliminar tipo documento");
             System.out.println("4. Buscar documento");
             System.out.println("5. Salir");
 
@@ -37,6 +41,9 @@ public class TipoDocumentoController {
                 case 2:
                     updateTipoDocumento();
                     break;
+                case 3: 
+                deleteTipoDocumento();
+                break;
 
                 default:
                     break;
@@ -70,5 +77,15 @@ public class TipoDocumentoController {
 
         updateTipoDocumentoUseCase.execute(updttipoDocumento);
 
+    }
+    public void deleteTipoDocumento(){
+        System.out.println("Ingrese el id del documento a eliminar");
+        int idDeleteTipoDocumento = scanner.nextInt();
+        scanner.nextLine();
+
+        TipoDocumento deletTipoDocumento=new TipoDocumento();
+        deletTipoDocumento.setId(idDeleteTipoDocumento);
+
+        deleteTipoDocumentoUseCase.execute(deletTipoDocumento);
     }
 }

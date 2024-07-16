@@ -6,6 +6,6 @@ public interface TipoDocumentoService {
     void createTipoDocumento(TipoDocumento tipoDocumento);
     void updateTipoDocumento(TipoDocumento tipoDocumento);
     // TipoDocumento tipoDocumento(int id);
-    // void deleteTipoDocumento(TipoDocumento tipoDocumento);
+    void deleteTipoDocumento(TipoDocumento tipoDocumento);
 
 }
