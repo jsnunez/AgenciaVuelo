@@ -15,6 +15,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.math.BigDecimal;
 
+import com.agencia.tarifa.domain.entity.Tarifa;
 import com.agencia.vuelo.domain.entity.BuscarVuelo;
 import com.agencia.vuelo.domain.entity.Ciudad;
 import com.agencia.vuelo.domain.entity.Pasajero;
@@ -212,13 +213,12 @@ public class vueloRepository implements vueloService {
 
       int resultVuelo = JOptionPane.showConfirmDialog(null, panel, "Seleccionar vuelo", JOptionPane.OK_CANCEL_OPTION,
           JOptionPane.PLAIN_MESSAGE);
-          String selectVuelo;
-          if (resultVuelo == JOptionPane.OK_OPTION) {
-             selectVuelo = (String) comboBoxVuelos.getSelectedItem();
-             System.out.println(selectVuelo);
-          }
-        
-   
+      String selectVuelo = "0";
+      if (resultVuelo == JOptionPane.OK_OPTION) {
+        selectVuelo = (String) comboBoxVuelos.getSelectedItem();
+        System.out.println(selectVuelo);
+      }
+
       var yesOrNo = 0;
 
       while (yesOrNo == 0) {
@@ -227,7 +227,7 @@ public class vueloRepository implements vueloService {
         yesOrNo = JOptionPane.showConfirmDialog(null, "Desea agregar un nuevo pasajero?");
 
       }
-      if (yesOrNo == 1) { 
+      if (yesOrNo == 1) {
         JOptionPane.showMessageDialog(null, "Selecciona silla");
       }
 
@@ -235,15 +235,15 @@ public class vueloRepository implements vueloService {
         String query = "INSERT INTO reservaviaje (fecha,idvuelos,idclientes,estado) VALUES (?,?,?,?)";
         PreparedStatement ps = connection.prepareStatement(query,
             PreparedStatement.RETURN_GENERATED_KEYS);
-        ps.setString(1,  bvuelo.getFechaIda());
-        ps.setInt(2, 1);
-        ps.setInt(3,1);
-        ps.setString(4,"reservado");
+        ps.setString(1, bvuelo.getFechaIda());
+        ps.setInt(2, Integer.parseInt(selectVuelo));
+        ps.setInt(3, 1);
+        ps.setString(4, "reservado");
 
         ps.executeUpdate();
       } catch (SQLException e) {
         e.printStackTrace();
-  
+
       }
 
       // try (ResultSet resultSet = statement.executeQuery()) {
@@ -269,20 +269,10 @@ public class vueloRepository implements vueloService {
   }
 
   private void agregarPasajero() {
-    JPanel panel = new JPanel(new GridLayout(0, 2));
+    JPanel panelBuscar = new JPanel(new GridLayout(0, 2));
 
-    JLabel nombreLabel = new JLabel("Nombre:");
-    JTextField nombreField = new JTextField();
-    panel.add(nombreLabel);
-    panel.add(nombreField);
-    JLabel edadLabel = new JLabel("edad:");
-    JTextField edadField = new JTextField();
-    panel.add(edadLabel);
-    panel.add(edadField);
-    
     List<String> listTiposDocuemtnos = new ArrayList<>();
     String sql = "SELECT nombre FROM tiposdocumentos";
-
     try (PreparedStatement statement = connection.prepareStatement(sql)) {
       try (ResultSet resultSet = statement.executeQuery()) {
         while (resultSet.next()) {
@@ -299,20 +289,104 @@ public class vueloRepository implements vueloService {
     JComboBox<String> comboBoxTipoDocumento = new JComboBox<>(listTiposDocuemtnos.toArray(new String[0]));
 
     // JPanel panel = new JPanel(new GridLayout(0, 2));
-    panel.add(new JLabel("Seleccione tipo Documento:"));
-    panel.add(comboBoxTipoDocumento);
+    panelBuscar.add(new JLabel("Seleccione tipo Documento:"));
+    panelBuscar.add(comboBoxTipoDocumento);
     JLabel documetoJLabel = new JLabel("Numero documento:");
     JTextField documentoField = new JTextField();
-    panel.add(documetoJLabel);
-    panel.add(documentoField);
-    int result = JOptionPane.showConfirmDialog(null, panel, "Seleccionar tipo Documento", JOptionPane.OK_CANCEL_OPTION,
+    panelBuscar.add(documetoJLabel);
+    panelBuscar.add(documentoField);
+    int result = JOptionPane.showConfirmDialog(null, panelBuscar, "Seleccionar tipo Documento",
+        JOptionPane.OK_CANCEL_OPTION,
         JOptionPane.PLAIN_MESSAGE);
-        String selectedTipoDocumento="";
-    int edadInt = Integer.parseInt(edadField.getText());
+    String tipoDocumento = null;
     if (result == JOptionPane.OK_OPTION) {
-      selectedTipoDocumento = (String) comboBoxTipoDocumento.getSelectedItem();
+      tipoDocumento = (String) comboBoxTipoDocumento.getSelectedItem();
+      System.out.println(tipoDocumento);
     }
-    Pasajero pasajero = new Pasajero(nombreField.getText(), edadInt, selectedTipoDocumento, documentoField.getText());
+    int idtipo=0;
+    try {
+      String sqlIdTipos = "SELECT id FROM tiposdocumentos WHERE nombre = ? ";
+      PreparedStatement statement = connection.prepareStatement(sqlIdTipos);
+      statement.setString(1, tipoDocumento);
+   
+      try (ResultSet resultSet = statement.executeQuery()) {
+        if (resultSet.next()) {
+          idtipo = resultSet.getInt("id");
+          System.out.println(idtipo);
+        }
+
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    Pasajero pasajero = null;
+    try {
+    String sqlPasajero = "SELECT id, nombre, idtipodocumento,numerodocumento FROM    clientes WHERE numerodocumento = ? and idtipodocumento = ? ";
+
+    PreparedStatement statement = connection.prepareStatement(sqlPasajero);
+    statement.setString(1, documentoField.getText());
+    statement.setInt(2, idtipo);
+
+    try (ResultSet resultSet = statement.executeQuery()) {
+    if (resultSet.next()) {
+    pasajero = new Pasajero();
+    pasajero.setId(resultSet.getInt("id"));
+    pasajero.setNombre(resultSet.getString("nombre"));
+    pasajero.setIdTipoDocumento(resultSet.getInt("idtipodocumento"));
+    pasajero.setDocumento(resultSet.getString("numerodocumento"));
+    }
+else{
+
+  JPanel panelPasajero = new JPanel(new GridLayout(0, 2));
+
+    JLabel nombreLabel = new JLabel("Nombre:");
+    JTextField nombreField = new JTextField();
+    panelPasajero.add(nombreLabel);
+    panelPasajero.add(nombreField);
+    JLabel edadLabel = new JLabel("edad:");
+    JTextField edadField = new JTextField();
+    panelPasajero.add(edadLabel);
+    panelPasajero.add(edadField);
+    JLabel tipoLabel = new JLabel("tipo documento:");
+    JLabel tipoDLabel = new JLabel(tipoDocumento);
+    
+    panelPasajero.add(tipoLabel);
+    panelPasajero.add(tipoDLabel);
+    
+    JLabel numeroLabel = new JLabel("numero documento:");
+    JLabel numeroDLabel = new JLabel(documentoField.getText());
+
+    
+    panelPasajero.add(numeroLabel);
+    panelPasajero.add(numeroDLabel);
+    int resulta = JOptionPane.showConfirmDialog(null, panelPasajero, "Seleccionar tipo Documento", JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE);
+}
+    } catch (SQLException e) {
+    e.printStackTrace();
+    } } catch (SQLException e) {
+    e.printStackTrace();
+    }
+  
+
+    // // JPanel panel = new JPanel(new GridLayout(0, 2));
+    // panel.add(new JLabel("Seleccione tipo Documento:"));
+    // // panel.add(comboBoxTipoDocumento);
+    // // JLabel documetoJLabel = new JLabel("Numero documento:");
+    // // JTextField documentoField = new JTextField();
+    // panel.add(documetoJLabel);
+    // panel.add(documentoField);
+    // int result = JOptionPane.showConfirmDialog(null, panel, "Seleccionar tipo
+    // Documento", JOptionPane.OK_CANCEL_OPTION,
+    // JOptionPane.PLAIN_MESSAGE);
+    // String selectedTipoDocumento="";
+    // int edadInt = Integer.parseInt(edadField.getText());
+    // if (result == JOptionPane.OK_OPTION) {
+    // selectedTipoDocumento = (String) comboBoxTipoDocumento.getSelectedItem();
+    // }
+    // Pasajero pasajero = new Pasajero(nombreField.getText(), edadInt,
+    // selectedTipoDocumento, documentoField.getText());
 
   }
 
