@@ -9,6 +9,7 @@ import com.agencia.avion.domain.entity.Avion;
 import com.agencia.avion.infraestructure.AvionController;
 import com.agencia.avion.infraestructure.AvionRepository;
 import com.agencia.tipoDocumento.application.CreateTipoDocumentoUseCase;
+import com.agencia.tipoDocumento.application.UpdateTipoDocumentoUseCase;
 import com.agencia.tipoDocumento.infraestructure.TipoDocumentoController;
 import com.agencia.tipoDocumento.infraestructure.TipoDocumentoRepository;
 import com.agencia.trayecto.application.FindTrayectoUseCase;
@@ -33,7 +34,9 @@ public class Main {
         TrayectoController trayectoController = new TrayectoController(findTrayectoUseCase);
 
         CreateTipoDocumentoUseCase createTipoDocumentoUseCase=new CreateTipoDocumentoUseCase(tipoDocumentoRepository);
-        TipoDocumentoController tipoDocumentoController=new TipoDocumentoController(createTipoDocumentoUseCase);
+        UpdateTipoDocumentoUseCase updateTipoDocumentoUseCase=new UpdateTipoDocumentoUseCase(tipoDocumentoRepository);
+
+        TipoDocumentoController tipoDocumentoController=new TipoDocumentoController(createTipoDocumentoUseCase,updateTipoDocumentoUseCase);
         
         while (true) {
             System.out.println("1. Gestion Avión");

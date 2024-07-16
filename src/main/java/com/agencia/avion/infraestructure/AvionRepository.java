@@ -136,7 +136,7 @@ public class AvionRepository implements AvionService{
 
     @Override
     public void deleteAvion(Avion avion) {
-        // TODO Auto-generated method stub
+        
         throw new UnsupportedOperationException("Unimplemented method 'deleteAvion'");
     }
 }

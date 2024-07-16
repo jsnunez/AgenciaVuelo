@@ -60,10 +60,20 @@ public class TipoDocumentoRepository implements TipoDocumentoService {
     }
         
 
-    // @Override
-    // public void updateTipoDocumento(TipoDocumento tipoDocumento) {}
-      
-    // }
+    @Override
+    public void updateTipoDocumento(TipoDocumento tipoDocumento) { 
+      String query="UPDATE tiposdocumentos SET nombre=? WHERE id=?";
+      try (PreparedStatement ps=connection.prepareStatement(query)){
+
+        ps.setString(1, tipoDocumento.getNombre());
+        ps.setInt(2, tipoDocumento.getId());
+        ps.executeUpdate();
+        System.out.println("Tipo documento actualizado con éxito");
+      }
+      catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
 
     // @Override
     // public TipoDocumentoService tipoDocumento(int id) {
