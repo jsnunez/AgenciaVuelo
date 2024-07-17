@@ -59,5 +59,49 @@ public class TrayectoRepository implements TrayectoService{
         return trayecto;
 
     }
+
+    @Override
+    public void updateTrayecto(Trayecto trayecto){
+
+        String query = "UPDATE viajes SET fechaviaje = ?, precioviaje = ?, idorigenaeropuerto = ?, iddestinoaeropuerto = ? WHERE id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(query)){
+
+            ps.setString(1, trayecto.getFechaViaje());
+            ps.setInt(2, trayecto.getPrecioViaje());
+            ps.setString(3, trayecto.getIdOrigenAeropuerto());
+            ps.setString(4, trayecto.getIdDestinoAeropuerto());
+            ps.setInt(5, trayecto.getId());
+
+            ps.executeUpdate();
+
+            System.out.println("Actualizado");
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public Trayecto deleteTrayecto(int id){
+
+        String query = "DELETE FROM viajes WHERE id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(query)){
+
+            ps.setInt(1, id);
+            ps.executeUpdate();
+
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void deleteTrayecto(Trayecto trayecto) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteTrayecto'");
+    }
+
 }
 

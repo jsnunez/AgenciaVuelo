@@ -17,7 +17,9 @@ import com.agencia.tipoDocumento.application.DeleteTipoDocumentoUseCase;
 import com.agencia.tipoDocumento.application.UpdateTipoDocumentoUseCase;
 import com.agencia.tipoDocumento.infraestructure.TipoDocumentoController;
 import com.agencia.tipoDocumento.infraestructure.TipoDocumentoRepository;
+import com.agencia.trayecto.application.DeleteTrayectoUseCase;
 import com.agencia.trayecto.application.FindTrayectoUseCase;
+import com.agencia.trayecto.application.UpdateTrayectoUseCase;
 import com.agencia.trayecto.infraestructure.TrayectoController;
 import com.agencia.trayecto.infraestructure.TrayectoRepository;
 
@@ -36,11 +38,13 @@ public class Main {
         FindEscalaUseCase findEscalaUseCase = new FindEscalaUseCase(escalaRepository);
         UpdateEscalaUseCase updateEscalaUseCase = new UpdateEscalaUseCase(escalaRepository);
         DeleteEscalaUseCase deleteEscalaUseCase = new DeleteEscalaUseCase(escalaRepository);
+        UpdateTrayectoUseCase updateTrayectoUseCase = new UpdateTrayectoUseCase(trayectoRepository);
+        FindTrayectoUseCase findTrayectoUseCase = new FindTrayectoUseCase(trayectoRepository);
+        DeleteTrayectoUseCase deleteTrayectoUseCase = new DeleteTrayectoUseCase(trayectoRepository);
 
         AvionController avionController = new AvionController(createAvionUseCase, updateAvionUseCase, deleteAvionUseCase, findAvionUseCase);
         EscalaController escalaController = new EscalaController(findEscalaUseCase, updateEscalaUseCase, deleteEscalaUseCase);
-        FindTrayectoUseCase findTrayectoUseCase = new FindTrayectoUseCase(trayectoRepository);
-        TrayectoController trayectoController = new TrayectoController(findTrayectoUseCase);
+        TrayectoController trayectoController = new TrayectoController(findTrayectoUseCase, updateTrayectoUseCase, deleteTrayectoUseCase);
 
         CreateTipoDocumentoUseCase createTipoDocumentoUseCase=new CreateTipoDocumentoUseCase(tipoDocumentoRepository);
         UpdateTipoDocumentoUseCase updateTipoDocumentoUseCase=new UpdateTipoDocumentoUseCase(tipoDocumentoRepository);
