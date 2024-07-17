@@ -220,10 +220,30 @@ public class vueloRepository implements vueloService {
       }
 
       var yesOrNo = 0;
-
+      int idreserva;
       while (yesOrNo == 0) {
+        try {
+          String query = "INSERT INTO reservaviaje (fecha,idvuelos,idclientes,estado) VALUES (?,?,?,?)";
+          PreparedStatement ps = connection.prepareStatement(query,
+              PreparedStatement.RETURN_GENERATED_KEYS);
+          ps.setString(1, bvuelo.getFechaIda());
+          ps.setInt(2, Integer.parseInt(selectVuelo));
+          ps.setInt(3, 1);
+          ps.setString(4, "reservado");
 
-        agregarPasajero();
+          ps.executeUpdate();
+        
+          try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+              idreserva = generatedKeys.getInt(1);
+              agregarPasajero(idreserva);
+            }
+          }
+        } catch (SQLException e) {
+          e.printStackTrace();
+
+        }
+        
         yesOrNo = JOptionPane.showConfirmDialog(null, "Desea agregar un nuevo pasajero?");
 
       }
@@ -231,21 +251,8 @@ public class vueloRepository implements vueloService {
         JOptionPane.showMessageDialog(null, "Selecciona silla");
       }
 
-      try {
-        String query = "INSERT INTO reservaviaje (fecha,idvuelos,idclientes,estado) VALUES (?,?,?,?)";
-        PreparedStatement ps = connection.prepareStatement(query,
-            PreparedStatement.RETURN_GENERATED_KEYS);
-        ps.setString(1, bvuelo.getFechaIda());
-        ps.setInt(2, Integer.parseInt(selectVuelo));
-        ps.setInt(3, 1);
-        ps.setString(4, "reservado");
 
-        ps.executeUpdate();
-      } catch (SQLException e) {
-        e.printStackTrace();
-
-      }
-
+      
       // try (ResultSet resultSet = statement.executeQuery()) {
       // if (resultSet.next()) {
       // int id = resultSet.getInt("id");
@@ -265,10 +272,46 @@ public class vueloRepository implements vueloService {
     } catch (SQLException e) {
       e.printStackTrace();
     }
+    JPanel panel = new JPanel(new GridLayout(6, 10));
+        
+    // Crear un array para almacenar los botones de opción
+    JRadioButton[][] options = new JRadioButton[6][10];
+    ButtonGroup group = new ButtonGroup();
 
-  }
+    // Rellenar el panel con botones de opción
+    for (int row = 0; row < 6; row++) {
+        for (int col = 0; col < 10; col++) {
+            options[row][col] = new JRadioButton("Silla "+ (row * 10 + col + 1));
+            group.add(options[row][col]);
+            panel.add(options[row][col]);
+            if (row == 0 && col == 9) {
+              options[row][col].setEnabled(false);
+          }
+        }
+        
+    }
 
-  private void agregarPasajero() {
+    // Mostrar el cuadro de diálogo con el panel
+    int result = JOptionPane.showConfirmDialog(null, panel, "Selecciona una opción",
+            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+    // Procesar la selección del usuario
+    if (result == JOptionPane.OK_OPTION) {
+        for (int row = 0; row < 6; row++) {
+            for (int col = 0; col < 10; col++) {
+                if (options[row][col].isSelected()) {
+                    System.out.println("Seleccionaste: " + options[row][col].getText());
+                }
+            }
+        }
+    } else {
+        System.out.println("Operación cancelada.");
+    }
+}
+
+  
+
+  private void agregarPasajero(int idreserva) {
     JPanel panelBuscar = new JPanel(new GridLayout(0, 2));
 
     List<String> listTiposDocuemtnos = new ArrayList<>();
@@ -303,12 +346,12 @@ public class vueloRepository implements vueloService {
       tipoDocumento = (String) comboBoxTipoDocumento.getSelectedItem();
       System.out.println(tipoDocumento);
     }
-    int idtipo=0;
+    int idtipo = 0;
     try {
       String sqlIdTipos = "SELECT id FROM tiposdocumentos WHERE nombre = ? ";
       PreparedStatement statement = connection.prepareStatement(sqlIdTipos);
       statement.setString(1, tipoDocumento);
-   
+
       try (ResultSet resultSet = statement.executeQuery()) {
         if (resultSet.next()) {
           idtipo = resultSet.getInt("id");
@@ -323,52 +366,115 @@ public class vueloRepository implements vueloService {
     }
     Pasajero pasajero = null;
     try {
-    String sqlPasajero = "SELECT id, nombre, idtipodocumento,numerodocumento FROM    clientes WHERE numerodocumento = ? and idtipodocumento = ? ";
+      String sqlPasajero = "SELECT id, nombre, idtipodocumento,numerodocumento,edad FROM    clientes WHERE numerodocumento = ? and idtipodocumento = ? ";
 
-    PreparedStatement statement = connection.prepareStatement(sqlPasajero);
-    statement.setString(1, documentoField.getText());
-    statement.setInt(2, idtipo);
+      PreparedStatement statement = connection.prepareStatement(sqlPasajero);
+      statement.setString(1, documentoField.getText());
+      statement.setInt(2, idtipo);
 
-    try (ResultSet resultSet = statement.executeQuery()) {
-    if (resultSet.next()) {
-    pasajero = new Pasajero();
-    pasajero.setId(resultSet.getInt("id"));
-    pasajero.setNombre(resultSet.getString("nombre"));
-    pasajero.setIdTipoDocumento(resultSet.getInt("idtipodocumento"));
-    pasajero.setDocumento(resultSet.getString("numerodocumento"));
-    }
-else{
+      try (ResultSet resultSet = statement.executeQuery()) {
+        if (resultSet.next()) {
+          pasajero = new Pasajero();
+          pasajero.setId(resultSet.getInt("id"));
+          pasajero.setNombre(resultSet.getString("nombre"));
+          pasajero.setEdad(resultSet.getInt("edad"));
+          pasajero.setIdTipoDocumento(resultSet.getInt("idtipodocumento"));
+          pasajero.setDocumento(resultSet.getString("numerodocumento"));
+          JPanel panelPasajero = new JPanel(new GridLayout(0, 1));
 
-  JPanel panelPasajero = new JPanel(new GridLayout(0, 2));
+          JLabel nombreLabel = new JLabel("Nombre:" + pasajero.getNombre());
+          panelPasajero.add(nombreLabel);
+          JLabel edadLabel = new JLabel("edad:" + pasajero.getEdad());
+          panelPasajero.add(edadLabel);
+          JLabel tipoLabel = new JLabel("tipo documento:" + tipoDocumento);
 
-    JLabel nombreLabel = new JLabel("Nombre:");
-    JTextField nombreField = new JTextField();
-    panelPasajero.add(nombreLabel);
-    panelPasajero.add(nombreField);
-    JLabel edadLabel = new JLabel("edad:");
-    JTextField edadField = new JTextField();
-    panelPasajero.add(edadLabel);
-    panelPasajero.add(edadField);
-    JLabel tipoLabel = new JLabel("tipo documento:");
-    JLabel tipoDLabel = new JLabel(tipoDocumento);
-    
-    panelPasajero.add(tipoLabel);
-    panelPasajero.add(tipoDLabel);
-    
-    JLabel numeroLabel = new JLabel("numero documento:");
-    JLabel numeroDLabel = new JLabel(documentoField.getText());
+          panelPasajero.add(tipoLabel);
+          JLabel numeroLabel = new JLabel("numero documento:" + pasajero.getDocumento());
 
-    
-    panelPasajero.add(numeroLabel);
-    panelPasajero.add(numeroDLabel);
-    int resulta = JOptionPane.showConfirmDialog(null, panelPasajero, "Seleccionar tipo Documento", JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE);
-}
+          panelPasajero.add(numeroLabel);
+          int resulta = JOptionPane.showConfirmDialog(null, panelPasajero, "Seleccionar tipo Documento",
+              JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        } else {
+
+          JPanel panelPasajero = new JPanel(new GridLayout(0, 2));
+
+          JLabel nombreLabel = new JLabel("Nombre:");
+          JTextField nombreField = new JTextField();
+          panelPasajero.add(nombreLabel);
+          panelPasajero.add(nombreField);
+          JLabel edadLabel = new JLabel("edad:");
+          JTextField edadField = new JTextField();
+          panelPasajero.add(edadLabel);
+          panelPasajero.add(edadField);
+          JLabel tipoLabel = new JLabel("tipo documento:");
+          JLabel tipoDLabel = new JLabel(tipoDocumento);
+
+          panelPasajero.add(tipoLabel);
+          panelPasajero.add(tipoDLabel);
+
+          JLabel numeroLabel = new JLabel("numero documento:");
+          JLabel numeroDLabel = new JLabel(documentoField.getText());
+
+          panelPasajero.add(numeroLabel);
+          panelPasajero.add(numeroDLabel);
+
+          int resulta = JOptionPane.showConfirmDialog(null, panelPasajero, "Seleccionar tipo Documento",
+              JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+          pasajero = new Pasajero(nombreField.getText(), Integer.parseInt(edadField.getText()), idtipo,
+              documentoField.getText());
+
+          try {
+            String query = "INSERT INTO clientes (nombre,edad,idtipodocumento,numerodocumento,rol) VALUES (?,?,?,?,?)";
+            PreparedStatement ps = connection.prepareStatement(query,
+                PreparedStatement.RETURN_GENERATED_KEYS);
+            ps.setString(1, pasajero.getNombre());
+            ps.setInt(2, pasajero.getEdad());
+            ps.setInt(3, pasajero.getIdTipoDocumento());
+            ps.setString(4, pasajero.getDocumento());
+            ps.setInt(5, 2);
+
+            ps.executeUpdate();
+
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+              if (generatedKeys.next()) {
+                pasajero.setId(generatedKeys.getInt(1));
+                System.out.println(pasajero.getId());
+              }
+            }
+          } catch (SQLException e) {
+            e.printStackTrace();
+
+          }
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
     } catch (SQLException e) {
-    e.printStackTrace();
-    } } catch (SQLException e) {
-    e.printStackTrace();
+      e.printStackTrace();
     }
-  
+
+    try {
+      String query = "INSERT INTO detallesreservaviaje (idreserva,idpasajero,idtarifa) VALUES (?,?,?)";
+      PreparedStatement ps = connection.prepareStatement(query,
+          PreparedStatement.RETURN_GENERATED_KEYS);
+      ps.setInt(1,idreserva);
+      ps.setInt(2, pasajero.getId());
+      ps.setInt(3, 1);
+
+      ps.executeUpdate();
+
+      try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+        if (generatedKeys.next()) {
+          pasajero.setId(generatedKeys.getInt(1));
+          System.out.println(pasajero.getId());
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+
+    }
+
+
 
     // // JPanel panel = new JPanel(new GridLayout(0, 2));
     // panel.add(new JLabel("Seleccione tipo Documento:"));
