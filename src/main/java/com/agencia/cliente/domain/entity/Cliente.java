@@ -8,10 +8,21 @@ public class Cliente {
     private int edad;
     private int idtipodocumento;
     private String numerodocumento;
+    private String tipodocumento;
     private int rol;
 
 
     
+    public Cliente(int id, String nombre, int edad, int idtipodocumento, String numerodocumento, String tipodocumento,
+            int rol) {
+        this.id = id;
+        this.nombre = nombre;
+        this.edad = edad;
+        this.idtipodocumento = idtipodocumento;
+        this.numerodocumento = numerodocumento;
+        this.tipodocumento = tipodocumento;
+        this.rol = rol;
+    }
     public Cliente(String nombre, int edad, int idtipodocumento, String numerodocumento, int rol) {
         this.nombre = nombre;
         this.edad = edad;
@@ -62,6 +73,12 @@ public class Cliente {
     }
     public void setRol(int rol) {
         this.rol = rol;
+    }
+    public String getTipodocumento() {
+        return tipodocumento;
+    }
+    public void setTipodocumento(String tipodocumento) {
+        this.tipodocumento = tipodocumento;
     }
     
 }
