@@ -88,14 +88,29 @@ public class TipoDocumentoRepository implements TipoDocumentoService {
         }
     }
         
-
-       
+    @Override
+    public TipoDocumento findtipoDocumento(int id) {
+        String query="SELECT id, nombre from tiposdocumentos where id=? ";
+        TipoDocumento tipoDocumento=null;
+        try (PreparedStatement ps=connection.prepareStatement(query)){
+            ps.setInt(1, id);
+            try (ResultSet rs =ps.executeQuery()){
+                if(rs.next()){
+                    tipoDocumento=new TipoDocumento();
+                    tipoDocumento.setId(rs.getInt("id"));
+                    tipoDocumento.setNombre(rs.getString("nombre"));
+                }
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return tipoDocumento;
+        
     }
+       
+}
 
-    // @Override
-    // public TipoDocumentoService tipoDocumento(int id) {
-      
-    // }
+    
 
    
 
