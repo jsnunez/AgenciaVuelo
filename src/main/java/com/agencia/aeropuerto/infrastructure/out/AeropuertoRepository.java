@@ -34,39 +34,39 @@ public class AeropuertoRepository implements AeropuertoService {
 
   @Override
   public void createAeropuerto(Aeropuerto aeropuerto) {
-    try {
-      String query = "INSERT INTO aeropuertosvuelos (descripcion,detalles,valor) VALUES (?,?,?)";
-      PreparedStatement ps = connection.prepareStatement(query,
-          PreparedStatement.RETURN_GENERATED_KEYS);
-      ps.setString(1, aeropuerto.getNombreae());
-      ps.setString(2, aeropuerto.getId());
-      ps.setString(3, aeropuerto.getIdciudadae());
-
-      ps.executeUpdate();
-      System.out.println("aeropuerto creada con éxito!");
-    } catch (SQLException e) {
-      e.printStackTrace();
-
-    }
+      try {
+          String query = "INSERT INTO aeropuertos (id, nombre, idciudad) VALUES (?, ?, ?)";
+          PreparedStatement ps = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+          ps.setString(1, aeropuerto.getId()); // Asegúrate de que getId() devuelve un valor que no exceda 5 caracteres
+          ps.setString(2, aeropuerto.getNombreae()); // Este campo es VARCHAR(50), verifica que no exceda 50 caracteres
+          ps.setString(3, aeropuerto.getIdciudadae()); // Este campo es VARCHAR(5), verifica que no exceda 5 caracteres
+  
+          ps.executeUpdate();
+          System.out.println("Aeropuerto creado con éxito!");
+      } catch (SQLException e) {
+          e.printStackTrace();
+      }
   }
+
 
   @Override
   public void updateAeropuerto(Aeropuerto aeropuerto) {
-    try {
-      String sql = "UPDATE aeropuertosvuelos SET detalles = ?,descripcion=?,valor=? WHERE id = ?";
-
-      PreparedStatement statement = connection.prepareStatement(sql);
-      statement.setString(1, aeropuerto.getId());
-      statement.setString(2, aeropuerto.getNombreae());
-      statement.setString(3, aeropuerto.getIdciudadae());
-
-      int rowsUpdate = statement.executeUpdate();
-      System.out.println("Aeropuerto actualizado  " + rowsUpdate);
-
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
+      try {
+          String sql = "UPDATE aeropuertos SET nombre = ?, idciudad = ? WHERE id = ?";
+  
+          PreparedStatement statement = connection.prepareStatement(sql);
+          statement.setString(1, aeropuerto.getNombreae());
+          statement.setString(2, aeropuerto.getIdciudadae());
+          statement.setString(3, aeropuerto.getId()); // Este es el cuarto parámetro
+  
+          int rowsUpdate = statement.executeUpdate();
+          System.out.println("Aeropuerto actualizado  " + rowsUpdate);
+  
+      } catch (SQLException e) {
+          e.printStackTrace();
+      }
   }
+  
 
   @Override
   public Aeropuerto finAeropuerto(String id) {
@@ -98,7 +98,7 @@ public class AeropuertoRepository implements AeropuertoService {
   public void deleteAeropuerto(String id) {
     try{
       String sql = "DELETE FROM aeropuertos WHERE id = ?";
-          int rowsUpdate = 0;
+          int rowsUpdate = 1;
       
                PreparedStatement statement = connection.prepareStatement(sql) ;
       
