@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
+
 import com.agencia.cliente.domain.entity.Cliente;
 import com.agencia.cliente.domain.service.ClienteService;
 
@@ -71,24 +72,28 @@ public class ClienteRepository implements ClienteService {
     public Cliente findCliente(int id) {
         Cliente cliente = null;
         try {
-            String sql = "SELECT id, nombre, edad, idtipodocumento, numerodocumento, rol FROM clientes WHERE id = ?";
-
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    cliente = new Cliente(id, sql, id, id, sql, id);
-                    cliente.setId(resultSet.getInt("id"));
-                    cliente.setNombre(resultSet.getString("nombre"));
-                    cliente.setEdad(resultSet.getInt("edad"));
-                    cliente.setIdtipodocumento(resultSet.getInt("idtipodocumento"));
-                    cliente.setNumerodocumento(resultSet.getString("numerodocumento"));
-                    cliente.setRol(resultSet.getInt("rol"));
+            String sql = "SELECT c.id, c.nombre, c.edad, c.idtipodocumento, c.numerodocumento, c.rol, td.nombre AS nombre_tipodocumento " +
+                         "FROM clientes c " +
+                         "INNER JOIN tiposdocumentos td ON c.idtipodocumento = td.id " +
+                         "WHERE c.id = ?";
+    
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setInt(1, id);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        cliente = new Cliente(id, sql, id, id, sql, id);
+                        cliente.setId(resultSet.getInt("id"));
+                        cliente.setNombre(resultSet.getString("nombre"));
+                        cliente.setEdad(resultSet.getInt("edad"));
+                        cliente.setIdtipodocumento(resultSet.getInt("idtipodocumento"));
+                        cliente.setNumerodocumento(resultSet.getString("numerodocumento"));
+                        cliente.setTipodocumento(resultSet.getString("nombre_tipodocumento"));
+                   
+                        cliente.setRol(resultSet.getInt("rol"));
+                                            }
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
-
+    
         } catch (SQLException e) {
             e.printStackTrace();
         }

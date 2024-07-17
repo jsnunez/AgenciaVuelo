@@ -1,6 +1,7 @@
 package com.agencia.cliente.infrastructure.in;
 
 import java.sql.SQLException;
+
 import javax.swing.JOptionPane;
 
 import com.agencia.cliente.aplication.CreateClienteCase;
@@ -76,6 +77,7 @@ public class ClienteController {
             System.out.println("ID Tipo Documento: " + cliente.getIdtipodocumento());
             System.out.println("Número Documento: " + cliente.getNumerodocumento());
             System.out.println("Rol: " + cliente.getRol());
+            System.out.println("Tipo Documento: "+cliente.getTipodocumento());
         } else {
             JOptionPane.showMessageDialog(null, "Cliente no encontrado!");
         }
