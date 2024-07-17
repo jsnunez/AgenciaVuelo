@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import com.agencia.tipoDocumento.application.CreateTipoDocumentoUseCase;
 import com.agencia.tipoDocumento.application.DeleteTipoDocumentoUseCase;
+import com.agencia.tipoDocumento.application.FindTipoDocumentoUseCase;
 import com.agencia.tipoDocumento.application.UpdateTipoDocumentoUseCase;
 import com.agencia.tipoDocumento.domain.entity.TipoDocumento;
 
@@ -12,12 +13,14 @@ public class TipoDocumentoController {
     private final CreateTipoDocumentoUseCase createTipoDocumentoUseCase;
     private final UpdateTipoDocumentoUseCase updateTipoDocumentoUseCase;
     private final DeleteTipoDocumentoUseCase deleteTipoDocumentoUseCase;
+    private final FindTipoDocumentoUseCase findTipoDocumentoUseCase;
 
     public TipoDocumentoController(CreateTipoDocumentoUseCase createTipoDocumentoUseCase, UpdateTipoDocumentoUseCase updateTipoDocumentoUseCase,
-    DeleteTipoDocumentoUseCase deleteTipoDocumentoUseCase) {
+    DeleteTipoDocumentoUseCase deleteTipoDocumentoUseCase, FindTipoDocumentoUseCase findTipoDocumentoUseCase) {
         this.createTipoDocumentoUseCase = createTipoDocumentoUseCase;
         this.updateTipoDocumentoUseCase = updateTipoDocumentoUseCase;
         this.deleteTipoDocumentoUseCase=deleteTipoDocumentoUseCase;
+        this.findTipoDocumentoUseCase = findTipoDocumentoUseCase;
     }
     
 
@@ -43,6 +46,10 @@ public class TipoDocumentoController {
                     break;
                 case 3: 
                 deleteTipoDocumento();
+                break;
+
+                case 4:
+                findIdtipoDocumento();
                 break;
 
                 default:
@@ -87,5 +94,22 @@ public class TipoDocumentoController {
         deletTipoDocumento.setId(idDeleteTipoDocumento);
 
         deleteTipoDocumentoUseCase.execute(deletTipoDocumento);
+    }
+
+    public void findIdtipoDocumento(){
+        System.out.println("Ingrese id a consultar");
+        int idfindTipoDocumento=scanner.nextInt();
+        scanner.nextLine();
+
+        TipoDocumento encontrar= findTipoDocumentoUseCase.execute(idfindTipoDocumento);
+        if(encontrar!= null){
+            System.out.println("Id: "+encontrar.getId());
+            System.out.println("Nombre: "+encontrar.getNombre());
+
+        }
+        else {
+            System.out.println("No se encontro el tipo de documento");
+        }
+
     }
 }

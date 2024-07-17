@@ -1,5 +1,7 @@
 package com.agencia.escala.infraestructure;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import com.agencia.escala.application.DeleteEscalaUseCase;
@@ -66,25 +68,30 @@ public class EscalaController {
 
     }
 
-    public void findEscalas() {
+   public void findEscalas() {
+    System.out.println("¿Cuál es el id del trayecto del cual desea consultar las escalas?");
+    int idViaje = scanner.nextInt();
+    scanner.nextLine();
+    List<Escala> escalas= new ArrayList<>();
+    escalas = findEscalaUseCase.execute(idViaje); // Asumiendo que devuelve una lista de escalas
 
-        System.out.println("Cuál es el id del trayecto del cual desea consultar las escalas: ");
-        int idViaje = scanner.nextInt();
-        scanner.nextLine();
+    if (!escalas.isEmpty()) {
+        System.out.println(escalas);
+        // escalas.forEach(escala -> System.out.println(escala.getId()));
 
-        Escala findEscala = findEscalaUseCase.execute(idViaje);
-
-        if (findEscala != null) {
-            System.out.println("Escala id: " + findEscala.getId());
-            System.out.println("Numero de conexiòn: " + findEscala.getNumeroConexion());
-            System.out.println("Id trayecto: " + findEscala.getIdViaje());
-            System.out.println("Id Avión: " + findEscala.getIdAvion());
-            System.out.println("Id aeropuerto: " + findEscala.getIdAeropuerto());
-        } else {
-            System.out.println("Escala not found");
+        for (Escala escala : escalas) {
+            System.out.println("Escala id: " + escala.getId());
+            System.out.println("Número de conexión: " + escala.getNumeroConexion());
+            System.out.println("Id trayecto: " + escala.getIdViaje());
+            System.out.println("Id Avión: " + escala.getIdAvion());
+            System.out.println("Id aeropuerto: " + escala.getIdAeropuerto());
+            System.out.println("------------"); // Separador para mayor claridad
         }
-
+    } else {
+        System.out.println("No se encontraron escalas para el id de viaje proporcionado.");
     }
+}
+
 
     public void updateEscala() {
 
