@@ -12,6 +12,9 @@ import com.agencia.escala.application.FindEscalaUseCase;
 import com.agencia.escala.application.UpdateEscalaUseCase;
 import com.agencia.escala.infraestructure.EscalaController;
 import com.agencia.escala.infraestructure.EscalaRepository;
+import com.agencia.revision.application.CreateRevisionUseCase;
+import com.agencia.revision.infraestructure.RevisionController;
+import com.agencia.revision.infraestructure.RevisionRepository;
 import com.agencia.tipoDocumento.application.CreateTipoDocumentoUseCase;
 import com.agencia.tipoDocumento.application.DeleteTipoDocumentoUseCase;
 import com.agencia.tipoDocumento.application.FindTipoDocumentoUseCase;
@@ -31,33 +34,40 @@ public class Main {
         TrayectoRepository trayectoRepository = new TrayectoRepository();
         TipoDocumentoRepository tipoDocumentoRepository=new TipoDocumentoRepository();
         EscalaRepository escalaRepository = new EscalaRepository();
+        RevisionRepository revisionRepository = new RevisionRepository();
 
         FindAvionUseCase findAvionUseCase = new FindAvionUseCase(avionRepository);
         CreateAvionUseCase createAvionUseCase = new CreateAvionUseCase(avionRepository);
         DeleteAvionUseCase deleteAvionUseCase = new DeleteAvionUseCase(avionRepository);
         UpdateAvionUseCase updateAvionUseCase = new UpdateAvionUseCase(avionRepository);
+
         FindEscalaUseCase findEscalaUseCase = new FindEscalaUseCase(escalaRepository);
         UpdateEscalaUseCase updateEscalaUseCase = new UpdateEscalaUseCase(escalaRepository);
         DeleteEscalaUseCase deleteEscalaUseCase = new DeleteEscalaUseCase(escalaRepository);
+
+        CreateRevisionUseCase createRevisionUseCase = new CreateRevisionUseCase(revisionRepository);
         UpdateTrayectoUseCase updateTrayectoUseCase = new UpdateTrayectoUseCase(trayectoRepository);
-        FindTrayectoUseCase findTrayectoUseCase = new FindTrayectoUseCase(trayectoRepository);
         DeleteTrayectoUseCase deleteTrayectoUseCase = new DeleteTrayectoUseCase(trayectoRepository);
 
         AvionController avionController = new AvionController(createAvionUseCase, updateAvionUseCase, deleteAvionUseCase, findAvionUseCase);
         EscalaController escalaController = new EscalaController(findEscalaUseCase, updateEscalaUseCase, deleteEscalaUseCase);
-        TrayectoController trayectoController = new TrayectoController(findTrayectoUseCase, updateTrayectoUseCase, deleteTrayectoUseCase);
+        FindTrayectoUseCase findTrayectoUseCase = new FindTrayectoUseCase(trayectoRepository);
+        TrayectoController trayectoController = new TrayectoController(findTrayectoUseCase,updateTrayectoUseCase,deleteTrayectoUseCase); 
+        RevisionController revisionController = new RevisionController(createRevisionUseCase);
 
         CreateTipoDocumentoUseCase createTipoDocumentoUseCase=new CreateTipoDocumentoUseCase(tipoDocumentoRepository);
         UpdateTipoDocumentoUseCase updateTipoDocumentoUseCase=new UpdateTipoDocumentoUseCase(tipoDocumentoRepository);
         DeleteTipoDocumentoUseCase deleteTipoDocumentoUseCase=new DeleteTipoDocumentoUseCase(tipoDocumentoRepository);
         FindTipoDocumentoUseCase findTipoDocumentoUseCase=new FindTipoDocumentoUseCase(tipoDocumentoRepository);
-        TipoDocumentoController tipoDocumentoController=new TipoDocumentoController(createTipoDocumentoUseCase,updateTipoDocumentoUseCase,deleteTipoDocumentoUseCase,findTipoDocumentoUseCase);
+        TipoDocumentoController tipoDocumentoController=new TipoDocumentoController(createTipoDocumentoUseCase, updateTipoDocumentoUseCase,deleteTipoDocumentoUseCase,findTipoDocumentoUseCase);
         
         while (true) {
             System.out.println("1. Gestion Avión");
             System.out.println("2. Gestion Trayectos");
             System.out.println("3. Gestion Escalas");
             System.out.println("4. Gestión tipo documento");
+            System.out.println("5. Gestión revisión de mantenimiento de aviones");
+
             int opcion = scanner.nextInt();
             scanner.nextLine(); // Consumir el salto de línea después de nextInt
             
@@ -82,9 +92,14 @@ public class Main {
                 
                     tipoDocumentoController.gestionTipoDocumento();
                     break;
-                    
+
 
                 case 5:
+                    revisionController.gestionRevision();
+                    break;
+                    
+
+                case 6:
 
                     System.out.println("Saliendo...");
                     scanner.close();

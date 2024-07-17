@@ -2,62 +2,76 @@ package com.agencia.revision.domain.entity;
 
 
 public class Revision {
-    private String id;
-    private String idAvion;
+    private int id;
     private String fechaRevision;
+    private int idAvion;
     private String descripcion;
-    private String idEmpleado;
+    private int idEmpleado;
     
     
     public Revision() {
     }
 
-    public Revision(String id, String idAvion, String fechaRevision, String descripcion, String idEmpleado) {
+
+    public Revision(int id, String fechaRevision, int idAvion, String descripcion, int idEmpleado) {
         this.id = id;
-        this.idAvion = idAvion;
         this.fechaRevision = fechaRevision;
+        this.idAvion = idAvion;
         this.descripcion = descripcion;
         this.idEmpleado = idEmpleado;
     }
 
-    public String getId() {
+
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+
+    public void setId(int id) {
         this.id = id;
-    }
-
-    public String getIdAvion() {
-        return idAvion;
-    }
-
-    public void setIdAvion(String idAvion) {
-        this.idAvion = idAvion;
     }
 
     public String getFechaRevision() {
         return fechaRevision;
     }
 
+
     public void setFechaRevision(String fechaRevision) {
         this.fechaRevision = fechaRevision;
     }
+
+
+    public int getIdAvion() {
+        return idAvion;
+    }
+
+
+    public void setIdAvion(int idAvion) {
+        this.idAvion = idAvion;
+    }
+
 
     public String getDescripcion() {
         return descripcion;
     }
 
+
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
 
-    public String getIdEmpleado() {
+
+    public int getIdEmpleado() {
         return idEmpleado;
     }
 
-    public void setIdEmpleado(String idEmpleado) {
+
+    public void setIdEmpleado(int idEmpleado) {
         this.idEmpleado = idEmpleado;
     }
 
+
+
+
+   
 }
