@@ -1,8 +1,8 @@
 package com.agencia.vuelo.domain.entity;
 
 public class TipoDocumento {
-int id;
-String nombre;
+    private int id;
+    private String nombre;
 
 public TipoDocumento() {
 }

@@ -1,6 +1,7 @@
 package com.agencia.vuelo.application;
 
 import com.agencia.vuelo.domain.entity.BuscarVuelo;
+import com.agencia.vuelo.domain.entity.Pasajero;
 import com.agencia.vuelo.domain.service.vueloService;
 
 public class VerificarPasajero {
@@ -10,7 +11,7 @@ public class VerificarPasajero {
         this.vueloService = vueloService;
     }
 
-    public void execute() {
-        
+    public void execute(Pasajero pasajero) {
+         vueloService.VerificarPasajero(pasajero);;
 }
 }

@@ -4,6 +4,7 @@ package com.agencia.vuelo.domain.service;
 import java.util.List;
 
 import com.agencia.vuelo.domain.entity.Ciudad;
+import com.agencia.vuelo.domain.entity.Pasajero;
 import com.agencia.vuelo.domain.entity.VuelosDto;
 import com.agencia.vuelo.domain.entity.vuelo;
 import com.agencia.tipoDocumento.domain.entity.TipoDocumento;
@@ -18,6 +19,6 @@ public interface vueloService {
     void deletevuelo(int id);
     List<Ciudad> findAllCiudades();
     int crearReserva(BuscarVuelo bVuelo);
-    void VerificarPasajero();
+    void VerificarPasajero(Pasajero pasajero);
     List<TipoDocumento> buscarTipoDocumento();
 }
