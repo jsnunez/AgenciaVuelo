@@ -4,6 +4,15 @@ import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
+import com.agencia.reserva.application.BuscarCiudades;
+import com.agencia.reserva.application.BuscarTiposDocumentos;
+import com.agencia.reserva.application.BuscarvuelosUseCase;
+import com.agencia.reserva.application.ConsultvueloUseCase;
+import com.agencia.reserva.application.CrearReservaUseCase;
+import com.agencia.reserva.application.VerificarPasajero;
+import com.agencia.reserva.domain.service.vueloService;
+import com.agencia.reserva.infraestructure.in.vueloController;
+import com.agencia.reserva.infraestructure.out.vueloRepository;
 import com.agencia.tarifa.application.CreateTarifaUseCase;
 import com.agencia.tarifa.application.DeleteTarifaUseCase;
 import com.agencia.tarifa.application.FindTarifaUseCase;
@@ -11,15 +20,6 @@ import com.agencia.tarifa.application.UpdateTarifaUseCase;
 import com.agencia.tarifa.domain.service.TarifaService;
 import com.agencia.tarifa.infraestructure.in.TarifaController;
 import com.agencia.tarifa.infraestructure.out.TarifaRepository;
-import com.agencia.vuelo.application.BuscarCiudades;
-import com.agencia.vuelo.application.BuscarTiposDocumentos;
-import com.agencia.vuelo.application.BuscarvuelosUseCase;
-import com.agencia.vuelo.application.ConsultvueloUseCase;
-import com.agencia.vuelo.application.CrearReservaUseCase;
-import com.agencia.vuelo.application.VerificarPasajero;
-import com.agencia.vuelo.domain.service.vueloService;
-import com.agencia.vuelo.infraestructure.in.vueloController;
-import com.agencia.vuelo.infraestructure.out.vueloRepository;
 
 public class mainsebastian {
     public static void main(String[] args) {
