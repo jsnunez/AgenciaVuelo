@@ -15,6 +15,10 @@ public Pasajero(int id, String nombre, int edad, String tipoDocumento, int idTip
     this.idTipoDocumento = idTipoDocumento;
     this.documento = documento;
 }
+public Pasajero(int idTipoDocumento, String documento) {
+    this.idTipoDocumento = idTipoDocumento;
+    this.documento = documento;
+}
 public Pasajero(String nombre, int edad, int idTipoDocumento, String documento) {
     this.nombre = nombre;
     this.edad = edad;

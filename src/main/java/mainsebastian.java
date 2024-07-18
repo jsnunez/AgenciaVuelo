@@ -11,8 +11,12 @@ import com.agencia.tarifa.application.UpdateTarifaUseCase;
 import com.agencia.tarifa.domain.service.TarifaService;
 import com.agencia.tarifa.infraestructure.in.TarifaController;
 import com.agencia.tarifa.infraestructure.out.TarifaRepository;
-import com.agencia.vuelo.application.BuscarVueloUseCase;
+import com.agencia.vuelo.application.BuscarCiudades;
+import com.agencia.vuelo.application.BuscarTiposDocumentos;
+import com.agencia.vuelo.application.BuscarvuelosUseCase;
 import com.agencia.vuelo.application.ConsultvueloUseCase;
+import com.agencia.vuelo.application.CrearReservaUseCase;
+import com.agencia.vuelo.application.VerificarPasajero;
 import com.agencia.vuelo.domain.service.vueloService;
 import com.agencia.vuelo.infraestructure.in.vueloController;
 import com.agencia.vuelo.infraestructure.out.vueloRepository;
@@ -78,8 +82,12 @@ public class mainsebastian {
                 case 1:
                     vueloService vueloService = new vueloRepository();
                     ConsultvueloUseCase consultvueloUseCase =  new ConsultvueloUseCase(vueloService);
-                    BuscarVueloUseCase buscarVueloUseCase = new BuscarVueloUseCase(vueloService);
-                    vueloController consoleAdapterVuelo = new vueloController(consultvueloUseCase,buscarVueloUseCase);
+                    BuscarCiudades buscarCiudades = new BuscarCiudades(vueloService);
+                    BuscarvuelosUseCase buscarvuelosUseCase = new BuscarvuelosUseCase(vueloService);
+                    CrearReservaUseCase crearReservaUseCase = new CrearReservaUseCase(vueloService);
+                    VerificarPasajero verificarPasajero = new VerificarPasajero(vueloService);
+                    BuscarTiposDocumentos buscarTiposDocumentos = new BuscarTiposDocumentos(vueloService);
+                    vueloController consoleAdapterVuelo = new vueloController(consultvueloUseCase,buscarCiudades,buscarvuelosUseCase,crearReservaUseCase,verificarPasajero,buscarTiposDocumentos);
 
                     Object[] optionsVuelos = { "Consultar vuelos", "Buscar vuelo", "Seleccionar vuelo",
                             "Añadir pasajero", "Seleccionar asiento", " Salir" };
@@ -100,6 +108,8 @@ public class mainsebastian {
                             break;
                         case 1:
                         consoleAdapterVuelo.buscar();
+
+                        
                             break;
                         case 2:
                             // consoleAdapter.actualizar();
