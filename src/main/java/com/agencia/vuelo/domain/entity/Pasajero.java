@@ -1,12 +1,12 @@
 package com.agencia.vuelo.domain.entity;
 
 public class Pasajero {
-int id;
-String nombre;
-int edad;
-String tipoDocumento;
-int idTipoDocumento;
-String documento;
+private int id;
+private String nombre;
+private int edad;
+private String tipoDocumento;
+private int idTipoDocumento;
+private String documento;
 public Pasajero(int id, String nombre, int edad, String tipoDocumento, int idTipoDocumento, String documento) {
     this.id = id;
     this.nombre = nombre;

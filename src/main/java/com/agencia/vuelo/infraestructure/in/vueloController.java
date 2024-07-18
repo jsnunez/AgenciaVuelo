@@ -1,6 +1,11 @@
 package com.agencia.vuelo.infraestructure.in;
 
+import java.awt.*;
+import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -8,10 +13,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import com.agencia.vuelo.application.ConsultvueloUseCase;
@@ -75,11 +85,13 @@ public class vueloController {
             Pasajero pasajero=verificarPasajero(tipos);
             System.out.println(pasajero.getIdTipoDocumento());
             System.out.println(pasajero.getDocumento());
+            verificarPasajero.execute(pasajero);
             yesOrNo = JOptionPane.showConfirmDialog(null, "Desea agregar un nuevo pasajero?");
         }
         if (yesOrNo == 1) {
             JOptionPane.showMessageDialog(null, "Selecciona silla");
         }
+        seleccionarSilla();
 
     }
 
@@ -113,6 +125,7 @@ public class vueloController {
             }
         }
         Pasajero pasajero = new Pasajero(idtipodocumento,documentoField.getText());
+        pasajero.setTipoDocumento(tipoDocumento);
         return pasajero;
        
     }
@@ -201,4 +214,97 @@ public class vueloController {
     public void eliminar() throws SQLException {
 
     }
+
+
+     public void seleccionarSilla() {
+    JPanel optionsPanel = new JPanel(new GridLayout(6, 15));
+    optionsPanel.setOpaque(false);
+    optionsPanel.setBackground(Color.black);
+    JRadioButton[][] options = new JRadioButton[6][20];
+    ButtonGroup group = new ButtonGroup();
+    char c = 'A';
+    for (int row = 0; row < 6; row++) {
+      for (int col = 0; col < 20; col++) {
+
+        options[row][col] = new JRadioButton(Character.toString(c) + (col + 1));
+        // options[row][col].setOpaque(false);
+        options[row][col].setBackground(Color.gray);
+
+        options[row][col].setForeground(Color.green);
+
+        group.add(options[row][col]);
+        optionsPanel.add(options[row][col]);
+
+        if (row == 0 && col == 9) {
+
+          options[row][col].setEnabled(false);
+          options[row][col].setOpaque(true);
+
+          // options[row][col].setBackground(Color.red);
+
+        }
+      }
+      c++;
+    }
+
+    // Crear el panel principal que contendrá el panel de opciones
+    JPanel mainPanel = new JPanel(new BorderLayout(10, 10)); // Margen de 10 píxeles
+    mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Márgenes alrededor del panel principal
+    mainPanel.setOpaque(false); // Hacer el panel principal transparente
+    mainPanel.add(optionsPanel, BorderLayout.CENTER);
+
+    // Crear el cuadro de diálogo con un panel de fondo con imagen
+    BackgroundPanel backgroundPanel = new BackgroundPanel(mainPanel, "src\\main\\resources\\avion.png"); // Cambia esta
+                                                                                                         // ruta a la
+                                                                                                         // ruta de tu
+                                                                                                         // imagen
+    JOptionPane.showMessageDialog(null, backgroundPanel, "Selecciona una opción", JOptionPane.PLAIN_MESSAGE);
+
+    // Procesar la selección del usuario
+    for (int row = 0; row < 6; row++) {
+      for (int col = 0; col < 10; col++) {
+        if (options[row][col].isSelected()) {
+          System.out.println("Seleccionaste: " + options[row][col].getText());
+        }
+      }
+    }
+  }
+
+  class BackgroundPanel extends JPanel {
+    private Image backgroundImage;
+    private JComponent component;
+
+    public BackgroundPanel(JComponent component, String filePath) {
+      this.component = component;
+      try {
+        backgroundImage = ImageIO.read(new File(filePath));
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      setLayout(new GridBagLayout());
+      add(component);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+      super.paintComponent(g);
+      if (backgroundImage != null) {
+        int imgWidth = backgroundImage.getWidth(this);
+        int imgHeight = backgroundImage.getHeight(this);
+        int x = (getWidth() - imgWidth) / 2;
+        int y = (getHeight() - imgHeight) / 2;
+        g.drawImage(backgroundImage, x, y, imgWidth, imgHeight, this);
+      }
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+      if (backgroundImage != null) {
+        return new Dimension(1200, 700);
+      } else {
+        return super.getPreferredSize();
+      }
+    }
+  }
+
 }

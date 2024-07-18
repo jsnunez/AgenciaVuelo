@@ -1,8 +1,8 @@
 package com.agencia.vuelo.domain.entity;
 
 public class Ciudad {
-String id;
-String ciudad;
+private String id;
+private String ciudad;
 public Ciudad() {
 }
 public Ciudad(String id, String ciudad) {

@@ -158,7 +158,6 @@ public class vueloRepository implements vueloService {
 
   }
 
-  
   class ImagePanel extends JPanel {
     private Image backgroundImage;
 
@@ -394,100 +393,10 @@ public class vueloRepository implements vueloService {
     return ciudades;
   }
 
-  public void seleccionarSilla() {
-    JPanel optionsPanel = new JPanel(new GridLayout(6, 15));
-    optionsPanel.setOpaque(false);
-    optionsPanel.setBackground(Color.black);
-    JRadioButton[][] options = new JRadioButton[6][20];
-    ButtonGroup group = new ButtonGroup();
-    char c = 'A';
-    for (int row = 0; row < 6; row++) {
-      for (int col = 0; col < 20; col++) {
-
-        options[row][col] = new JRadioButton(Character.toString(c) + (col + 1));
-        // options[row][col].setOpaque(false);
-        options[row][col].setBackground(Color.gray);
-
-        options[row][col].setForeground(Color.green);
-
-        group.add(options[row][col]);
-        optionsPanel.add(options[row][col]);
-
-        if (row == 0 && col == 9) {
-
-          options[row][col].setEnabled(false);
-          options[row][col].setOpaque(true);
-
-          // options[row][col].setBackground(Color.red);
-
-        }
-      }
-      c++;
-    }
-
-    // Crear el panel principal que contendrá el panel de opciones
-    JPanel mainPanel = new JPanel(new BorderLayout(10, 10)); // Margen de 10 píxeles
-    mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Márgenes alrededor del panel principal
-    mainPanel.setOpaque(false); // Hacer el panel principal transparente
-    mainPanel.add(optionsPanel, BorderLayout.CENTER);
-
-    // Crear el cuadro de diálogo con un panel de fondo con imagen
-    BackgroundPanel backgroundPanel = new BackgroundPanel(mainPanel, "src\\main\\resources\\avion.png"); // Cambia esta
-                                                                                                         // ruta a la
-                                                                                                         // ruta de tu
-                                                                                                         // imagen
-    JOptionPane.showMessageDialog(null, backgroundPanel, "Selecciona una opción", JOptionPane.PLAIN_MESSAGE);
-
-    // Procesar la selección del usuario
-    for (int row = 0; row < 6; row++) {
-      for (int col = 0; col < 10; col++) {
-        if (options[row][col].isSelected()) {
-          System.out.println("Seleccionaste: " + options[row][col].getText());
-        }
-      }
-    }
-  }
-
-  class BackgroundPanel extends JPanel {
-    private Image backgroundImage;
-    private JComponent component;
-
-    public BackgroundPanel(JComponent component, String filePath) {
-      this.component = component;
-      try {
-        backgroundImage = ImageIO.read(new File(filePath));
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-      setLayout(new GridBagLayout());
-      add(component);
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-      super.paintComponent(g);
-      if (backgroundImage != null) {
-        int imgWidth = backgroundImage.getWidth(this);
-        int imgHeight = backgroundImage.getHeight(this);
-        int x = (getWidth() - imgWidth) / 2;
-        int y = (getHeight() - imgHeight) / 2;
-        g.drawImage(backgroundImage, x, y, imgWidth, imgHeight, this);
-      }
-    }
-
-    @Override
-    public Dimension getPreferredSize() {
-      if (backgroundImage != null) {
-        return new Dimension(1200, 700);
-      } else {
-        return super.getPreferredSize();
-      }
-    }
-  }
-
+ 
   @Override
   public int crearReserva(BuscarVuelo bvuelo) {
-    int idreserva=0;
+    int idreserva = 0;
     try {
       String query = "INSERT INTO reservaviaje (fecha,idvuelos,idclientes,estado) VALUES (?,?,?,?)";
       PreparedStatement ps = connection.prepareStatement(query,
@@ -502,7 +411,7 @@ public class vueloRepository implements vueloService {
       try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
         if (generatedKeys.next()) {
           idreserva = generatedKeys.getInt(1);
-        
+
         }
       }
     } catch (SQLException e) {
@@ -513,10 +422,75 @@ public class vueloRepository implements vueloService {
   }
 
   @Override
-  public void VerificarPasajero() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'VerificarPasajero'");
+  public void VerificarPasajero(Pasajero pasajero) {
+    try {
+      String sqlPasajero = "SELECT c.id, c.nombre, c.idtipodocumento,c.numerodocumento,c.edad , t.nombre as tipodocumento FROM    clientes c Join tiposdocumentos t on c.idtipodocumento = t.id WHERE numerodocumento = ? and idtipodocumento = ? ";
+
+      PreparedStatement statement = connection.prepareStatement(sqlPasajero);
+      statement.setString(1, pasajero.getDocumento());
+      statement.setInt(2, pasajero.getIdTipoDocumento());
+
+      try (ResultSet resultSet = statement.executeQuery()) {
+        if (resultSet.next()) {
+          pasajero = new Pasajero();
+          pasajero.setId(resultSet.getInt("id"));
+          pasajero.setNombre(resultSet.getString("nombre"));
+          pasajero.setEdad(resultSet.getInt("edad"));
+          pasajero.setIdTipoDocumento(resultSet.getInt("idtipodocumento"));
+          pasajero.setDocumento(resultSet.getString("numerodocumento"));
+          pasajero.setTipoDocumento("tipodocumento");
+          JPanel panelPasajero = new JPanel(new GridLayout(0, 1));
+
+          JLabel nombreLabel = new JLabel("Nombre:" + pasajero.getNombre());
+          panelPasajero.add(nombreLabel);
+          JLabel edadLabel = new JLabel("edad:" + pasajero.getEdad());
+          panelPasajero.add(edadLabel);
+          JLabel tipoLabel = new JLabel("tipo documento:" + pasajero.getTipoDocumento());
+
+          panelPasajero.add(tipoLabel);
+          JLabel numeroLabel = new JLabel("numero documento:" + pasajero.getDocumento());
+
+          panelPasajero.add(numeroLabel);
+          int resulta = JOptionPane.showConfirmDialog(null, panelPasajero, "Seleccionar tipo Documento",
+              JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        }else {
+
+          JPanel panelPasajero = new JPanel(new GridLayout(0, 2));
+
+          JLabel nombreLabel = new JLabel("Nombre:");
+          JTextField nombreField = new JTextField();
+          panelPasajero.add(nombreLabel);
+          panelPasajero.add(nombreField);
+          JLabel edadLabel = new JLabel("edad:");
+          JTextField edadField = new JTextField();
+          panelPasajero.add(edadLabel);
+          panelPasajero.add(edadField);
+          JLabel tipoLabel = new JLabel("tipo documento:");
+          JLabel tipoDLabel = new JLabel(pasajero.getTipoDocumento());
+
+          panelPasajero.add(tipoLabel);
+          panelPasajero.add(tipoDLabel);
+
+          JLabel numeroLabel = new JLabel("numero documento:");
+          JLabel numeroDLabel = new JLabel(pasajero.getDocumento());
+
+          panelPasajero.add(numeroLabel);
+          panelPasajero.add(numeroDLabel);
+
+          int resulta = JOptionPane.showConfirmDialog(null, panelPasajero, "Seleccionar tipo Documento",
+              JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+          pasajero = new Pasajero(nombreField.getText(), Integer.parseInt(edadField.getText()), pasajero.getIdTipoDocumento(),
+              pasajero.getDocumento());
+      }}
+       catch (SQLException e) {
+        e.printStackTrace();
+  
+      }
   }
+  catch (SQLException e) {
+    e.printStackTrace();
+
+  }}
 
   @Override
   public List<TipoDocumento> buscarTipoDocumento() {
@@ -525,7 +499,7 @@ public class vueloRepository implements vueloService {
     try (PreparedStatement statement = connection.prepareStatement(sql)) {
       try (ResultSet resultSet = statement.executeQuery()) {
         while (resultSet.next()) {
-          TipoDocumento tipo =new TipoDocumento();
+          TipoDocumento tipo = new TipoDocumento();
           tipo.setId(resultSet.getInt("id"));
           tipo.setNombre(resultSet.getString("nombre"));
           listTipoDocumento.add(tipo);
@@ -535,8 +509,8 @@ public class vueloRepository implements vueloService {
       }
     } catch (SQLException e) {
       e.printStackTrace();
-    } 
-   
+    }
+
     return listTipoDocumento;
   }
 }
