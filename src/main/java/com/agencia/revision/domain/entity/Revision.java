@@ -3,6 +3,7 @@ package com.agencia.revision.domain.entity;
 
 public class Revision {
     private int id;
+    private int idRevisionDetalle;
     private String fechaRevision;
     private int idAvion;
     private String descripcion;
@@ -13,8 +14,10 @@ public class Revision {
     }
 
 
-    public Revision(int id, String fechaRevision, int idAvion, String descripcion, int idEmpleado) {
+    public Revision(int id, int idRevisionDetalle, String fechaRevision, int idAvion, String descripcion,
+            int idEmpleado) {
         this.id = id;
+        this.idRevisionDetalle = idRevisionDetalle;
         this.fechaRevision = fechaRevision;
         this.idAvion = idAvion;
         this.descripcion = descripcion;
@@ -30,6 +33,17 @@ public class Revision {
     public void setId(int id) {
         this.id = id;
     }
+
+
+    public int getIdRevisionDetalle() {
+        return idRevisionDetalle;
+    }
+
+
+    public void setIdRevisionDetalle(int idRevisionDetalle) {
+        this.idRevisionDetalle = idRevisionDetalle;
+    }
+
 
     public String getFechaRevision() {
         return fechaRevision;
@@ -71,6 +85,7 @@ public class Revision {
     }
 
 
+ 
 
 
    
