@@ -3,13 +3,21 @@ package com.agencia.vuelo.domain.entity;
 
 
 public class BuscarVuelo {
+String idvuelo;
 String ciudadOrigen;
 String CiudadDestino;
 String fechaIda;
 String fechaRegreso;
 String idAeropuertoOrigen;
 String idAeropuertoDestino;
-public String getFechaIda;
+public String getIdvuelo() {
+    return idvuelo;
+}
+public void setIdvuelo(String idvuelo) {
+    this.idvuelo = idvuelo;
+}
+
+
 public BuscarVuelo() {
 }
 public BuscarVuelo(String fechaIda, String idAeropuertoOrigen, String idAeropuertoDestino) {
