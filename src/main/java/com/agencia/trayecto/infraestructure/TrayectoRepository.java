@@ -103,5 +103,19 @@ public class TrayectoRepository implements TrayectoService{
         throw new UnsupportedOperationException("Unimplemented method 'deleteTrayecto'");
     }
 
+    @Override
+
+    public void asignAvion(Trayecto trayecto){
+
+
+
+    }
+
+    @Override
+
+    public void asignTripulacion(Trayecto trayecto){
+
+    }
+
 }
 

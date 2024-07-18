@@ -15,4 +15,7 @@ public class FindTrayectoUseCase {
         return trayectoService.findTrayecto(id);
     }
 
+    
+
+
 }
