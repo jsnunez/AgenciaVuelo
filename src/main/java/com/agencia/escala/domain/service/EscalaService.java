@@ -9,5 +9,6 @@ public interface EscalaService {
     List<Escala> findEscala(int idViaje);
     void updateEscala(Escala escala);
     Escala deleteEscala(int id);
+    void asignAvion(Escala escala);
 
 }

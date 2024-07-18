@@ -104,4 +104,24 @@ public class EscalaRepository implements EscalaService {
         return null;
     }
 
+    @Override
+    public void asignAvion(Escala escala){
+        
+        String query = "UPDATE conexionesvuelos SET idavion = ? WHERE id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+
+            ps.setInt(1, escala.getIdAvion());
+            ps.setInt(2, escala.getId());
+
+            ps.executeUpdate();
+
+            System.out.println("Avión asignado ");
+        }catch(SQLException e ){
+            e.printStackTrace();
+        }
+    
+    }
+
+
 }
