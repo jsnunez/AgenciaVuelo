@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.agencia.escala.application.AsignAvionUseCase;
 import com.agencia.escala.application.DeleteEscalaUseCase;
 import com.agencia.escala.application.FindEscalaUseCase;
 import com.agencia.escala.application.UpdateEscalaUseCase;
@@ -15,11 +16,13 @@ public class EscalaController {
     private final FindEscalaUseCase findEscalaUseCase;
     private final UpdateEscalaUseCase updateEscalaUseCase;
     private final DeleteEscalaUseCase deleteEscalaUseCase;
+    private final AsignAvionUseCase asignAvionUseCase;
 
-    public EscalaController(FindEscalaUseCase findEscalaUseCase, UpdateEscalaUseCase updateEscalaUseCase, DeleteEscalaUseCase deleteEscalaUseCase) {
+    public EscalaController(FindEscalaUseCase findEscalaUseCase, UpdateEscalaUseCase updateEscalaUseCase, DeleteEscalaUseCase deleteEscalaUseCase, AsignAvionUseCase asignAvionUseCase) {
         this.findEscalaUseCase = findEscalaUseCase;
         this.updateEscalaUseCase = updateEscalaUseCase;
         this.deleteEscalaUseCase = deleteEscalaUseCase;
+        this.asignAvionUseCase = asignAvionUseCase;
     }
 
     Scanner scanner = new Scanner(System.in);
@@ -30,6 +33,7 @@ public class EscalaController {
             System.out.println("1. Encontrar Escala: ");
             System.out.println("2. Actualizar Escala: ");
             System.out.println("3. Eliminar Escala: ");
+            System.out.println("4. Asignar Avión a escala: ");
 
             System.out.println("4. Salir: ");
 
@@ -56,6 +60,10 @@ public class EscalaController {
                     break;
 
                 case 4:
+
+                    asignAvion();
+
+                case 5:
                     System.out.println("Saliendo...");
                     return;
 
@@ -131,4 +139,26 @@ public class EscalaController {
         }
     }
 
+    public void asignAvion(){
+
+        System.out.println("Ingrese el id de la escala a la cual le deseas asignar un avión: ");
+        int idEscalaAvion = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.println("Cuál es el id del avión que desea darle a la escala: ");
+        int idAvion = scanner.nextInt();
+        scanner.nextLine();
+
+        Escala escala = new Escala();
+
+        escala.setId(idEscalaAvion);
+        escala.setIdAvion(idAvion);
+
+        asignAvionUseCase.execute(escala);
+
+        System.out.println("Avión asignado <3");
+
+    }
+
 }
+
