@@ -5,8 +5,9 @@ import javax.swing.JOptionPane;
 
 import com.agencia.escala.application.FindEscalaUseCase;
 import com.agencia.escala.infraestructure.EscalaRepository;
-import com.agencia.reserva.application.AsignarSillaUseCase;
+import com.agencia.reserva.application.AsignarsillaUseCase;
 import com.agencia.reserva.application.BuscarCiudades;
+import com.agencia.reserva.application.BuscarSillasOcupadas;
 import com.agencia.reserva.application.BuscarTiposDocumentos;
 import com.agencia.reserva.application.BuscarvuelosUseCase;
 import com.agencia.reserva.application.ConsultvueloUseCase;
@@ -93,13 +94,14 @@ public class mainsebastian {
                     CrearReservaUseCase crearReservaUseCase = new CrearReservaUseCase(vueloService);
                     VerificarPasajero verificarPasajero = new VerificarPasajero(vueloService);
                     BuscarTiposDocumentos buscarTiposDocumentos = new BuscarTiposDocumentos(vueloService);
-                    AsignarSillaUseCase asignarSillaUseCase = new AsignarSillaUseCase(vueloService);
+                    AsignarsillaUseCase asignarSillaUseCase = new AsignarsillaUseCase(vueloService);
                     CrearReservaDetalleUseCase crearReservaDetalleUseCase = new CrearReservaDetalleUseCase(
                             vueloService);
+                    BuscarSillasOcupadas buscarSillasOcupadas = new BuscarSillasOcupadas(vueloService);
 
                     vueloController consoleAdapterVuelo = new vueloController(consultvueloUseCase, buscarCiudades,
                             buscarvuelosUseCase, crearReservaUseCase, verificarPasajero, buscarTiposDocumentos,
-                            findEscalaUseCase, crearReservaDetalleUseCase, asignarSillaUseCase);
+                            findEscalaUseCase, crearReservaDetalleUseCase, asignarSillaUseCase, buscarSillasOcupadas);
                     Object[] optionsVuelos = { "Consultar vuelos", "Buscar vuelo", "Seleccionar vuelo",
                             "Añadir pasajero", "Seleccionar asiento", " Salir" };
                     Object menuVuelos = JOptionPane.showInputDialog(null, "Seleccione Una Opcion",

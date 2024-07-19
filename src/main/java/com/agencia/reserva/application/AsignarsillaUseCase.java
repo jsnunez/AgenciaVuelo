@@ -7,10 +7,10 @@ import com.agencia.reserva.domain.entity.Asientosdetalles;
 
 import com.agencia.reserva.domain.service.vueloService;
 
-public class AsignarSillaUseCase {
+public class AsignarsillaUseCase {
     private final vueloService vueloService;
 
-    public AsignarSillaUseCase(com.agencia.reserva.domain.service.vueloService vueloService) {
+    public AsignarsillaUseCase(com.agencia.reserva.domain.service.vueloService vueloService) {
         this.vueloService = vueloService;
     }
   public  void execute(Asientosdetalles asientosdetalles)  {
