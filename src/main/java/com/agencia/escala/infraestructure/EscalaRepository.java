@@ -42,7 +42,7 @@ public class EscalaRepository implements EscalaService {
 
         List<Escala> escalas = new ArrayList<>();
 
-        String query = "SELECT id, numeroconexion, idviaje, idavion, idaeropuerto FROM conexionesvuelos WHERE idviaje = ?";
+        String query = "SELECT id, numeroconexion, idviaje, idavion, salidaidaeropuerto FROM conexionesvuelos WHERE idviaje = ?";
         Escala escala = null;
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
@@ -54,7 +54,7 @@ public class EscalaRepository implements EscalaService {
                     escala.setNumeroConexion(rs.getString("numeroconexion"));
                     escala.setIdViaje(rs.getInt("idviaje"));
                     escala.setIdAvion(rs.getInt("idavion"));
-                    escala.setIdAeropuerto(rs.getString("idaeropuerto"));
+                    escala.setIdAeropuerto(rs.getString("salidaidaeropuerto"));
                     escalas.add(escala);
                 }
 
@@ -70,7 +70,7 @@ public class EscalaRepository implements EscalaService {
     @Override
     public void updateEscala(Escala escala) {
 
-        String query = "UPDATE conexionesvuelos SET idavion = ?, idaeropuerto = ? WHERE id = ?";
+        String query = "UPDATE conexionesvuelos SET idavion = ?, salidaidaeropuerto = ? WHERE id = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
 
