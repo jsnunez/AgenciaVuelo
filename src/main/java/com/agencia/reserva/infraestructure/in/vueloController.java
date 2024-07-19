@@ -42,7 +42,7 @@ public class vueloController {
   private BuscarTiposDocumentos buscarTiposDocumentos;
   private FindEscalaUseCase findEscalaUseCase;
   private CrearReservaDetalleUseCase crearReservaDetalleUseCase;
-  private AsignarSillaUseCase asignarsillaUseCase;
+  private AsignarsillaUseCase asignarsillaUseCase;
 
 
 
@@ -52,7 +52,7 @@ public class vueloController {
       BuscarvuelosUseCase buscarvuelosUseCase, CrearReservaUseCase crearReservaUseCase,
       VerificarPasajero verificarPasajero, BuscarTiposDocumentos buscarTiposDocumentos,
       FindEscalaUseCase findEscalaUseCase, CrearReservaDetalleUseCase crearReservaDetalleUseCase,
-      AsignarSillaUseCase asignarsillaUseCase) {
+      AsignarsillaUseCase asignarsillaUseCase) {
     this.consultvueloUseCase = consultvueloUseCase;
     this.buscarCiudades = buscarCiudades;
     this.buscarvuelosUseCase = buscarvuelosUseCase;
