@@ -1,15 +1,16 @@
 
-
 import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
 import com.agencia.escala.application.FindEscalaUseCase;
 import com.agencia.escala.infraestructure.EscalaRepository;
+import com.agencia.reserva.application.AsignarSillaUseCase;
 import com.agencia.reserva.application.BuscarCiudades;
 import com.agencia.reserva.application.BuscarTiposDocumentos;
 import com.agencia.reserva.application.BuscarvuelosUseCase;
 import com.agencia.reserva.application.ConsultvueloUseCase;
+import com.agencia.reserva.application.CrearReservaDetalleUseCase;
 import com.agencia.reserva.application.CrearReservaUseCase;
 import com.agencia.reserva.application.VerificarPasajero;
 import com.agencia.reserva.domain.service.vueloService;
@@ -83,16 +84,22 @@ public class mainsebastian {
                     break;
                 case 1:
                     vueloService vueloService = new VueloRepository();
-                            EscalaRepository escalaRepository = new EscalaRepository();
-        FindEscalaUseCase findEscalaUseCase = new FindEscalaUseCase(escalaRepository);
+                    EscalaRepository escalaRepository = new EscalaRepository();
+                    FindEscalaUseCase findEscalaUseCase = new FindEscalaUseCase(escalaRepository);
 
-                    ConsultvueloUseCase consultvueloUseCase =  new ConsultvueloUseCase(vueloService);
+                    ConsultvueloUseCase consultvueloUseCase = new ConsultvueloUseCase(vueloService);
                     BuscarCiudades buscarCiudades = new BuscarCiudades(vueloService);
                     BuscarvuelosUseCase buscarvuelosUseCase = new BuscarvuelosUseCase(vueloService);
                     CrearReservaUseCase crearReservaUseCase = new CrearReservaUseCase(vueloService);
                     VerificarPasajero verificarPasajero = new VerificarPasajero(vueloService);
                     BuscarTiposDocumentos buscarTiposDocumentos = new BuscarTiposDocumentos(vueloService);
-                    VueloController consoleAdapterVuelo = new VueloController(consultvueloUseCase, buscarCiudades, buscarvuelosUseCase, crearReservaUseCase, verificarPasajero, buscarTiposDocumentos, findEscalaUseCase);
+                    AsignarSillaUseCase asignarSillaUseCase = new AsignarSillaUseCase(vueloService);
+                    CrearReservaDetalleUseCase crearReservaDetalleUseCase = new CrearReservaDetalleUseCase(
+                            vueloService);
+
+                    VueloController consoleAdapterVuelo = new VueloController(consultvueloUseCase, buscarCiudades,
+                            buscarvuelosUseCase, crearReservaUseCase, verificarPasajero, buscarTiposDocumentos,
+                            findEscalaUseCase, crearReservaDetalleUseCase, asignarSillaUseCase);
                     Object[] optionsVuelos = { "Consultar vuelos", "Buscar vuelo", "Seleccionar vuelo",
                             "Añadir pasajero", "Seleccionar asiento", " Salir" };
                     Object menuVuelos = JOptionPane.showInputDialog(null, "Seleccione Una Opcion",
@@ -111,9 +118,8 @@ public class mainsebastian {
                             consoleAdapterVuelo.consultar();
                             break;
                         case 1:
-                        consoleAdapterVuelo.buscar();
+                            consoleAdapterVuelo.buscar();
 
-                        
                             break;
                         case 2:
                             // consoleAdapter.actualizar();
@@ -126,7 +132,7 @@ public class mainsebastian {
                     }
             }
         } catch (SQLException e) {
-            
+
             e.printStackTrace();
         }
 

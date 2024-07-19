@@ -23,15 +23,11 @@ import javax.swing.JTextField;
 
 import com.agencia.escala.application.FindEscalaUseCase;
 import com.agencia.escala.domain.entity.Escala;
-import com.agencia.reserva.application.BuscarCiudades;
-import com.agencia.reserva.application.BuscarTiposDocumentos;
-import com.agencia.reserva.application.BuscarvuelosUseCase;
-import com.agencia.reserva.application.ConsultvueloUseCase;
-import com.agencia.reserva.application.CrearReservaUseCase;
-import com.agencia.reserva.application.UpdatevueloUseCase;
-import com.agencia.reserva.application.VerificarPasajero;
+import com.agencia.reserva.application.*;
+import com.agencia.reserva.domain.entity.Asientosdetalles;
 import com.agencia.reserva.domain.entity.BuscarVuelo;
 import com.agencia.reserva.domain.entity.Ciudad;
+import com.agencia.reserva.domain.entity.DetalleReserva;
 import com.agencia.reserva.domain.entity.Pasajero;
 import com.agencia.reserva.domain.entity.vuelo;
 import com.agencia.tipoDocumento.domain.entity.TipoDocumento;
@@ -45,11 +41,18 @@ public class VueloController {
   private VerificarPasajero verificarPasajero;
   private BuscarTiposDocumentos buscarTiposDocumentos;
   private FindEscalaUseCase findEscalaUseCase;
+  private CrearReservaDetalleUseCase crearReservaDetalleUseCase;
+  private AsignarSillaUseCase asignarsillaUseCase;
+
+
+
+  
 
   public VueloController(ConsultvueloUseCase consultvueloUseCase, BuscarCiudades buscarCiudades,
       BuscarvuelosUseCase buscarvuelosUseCase, CrearReservaUseCase crearReservaUseCase,
       VerificarPasajero verificarPasajero, BuscarTiposDocumentos buscarTiposDocumentos,
-      FindEscalaUseCase findEscalaUseCase) {
+      FindEscalaUseCase findEscalaUseCase, CrearReservaDetalleUseCase crearReservaDetalleUseCase,
+      AsignarSillaUseCase asignarsillaUseCase) {
     this.consultvueloUseCase = consultvueloUseCase;
     this.buscarCiudades = buscarCiudades;
     this.buscarvuelosUseCase = buscarvuelosUseCase;
@@ -57,6 +60,8 @@ public class VueloController {
     this.verificarPasajero = verificarPasajero;
     this.buscarTiposDocumentos = buscarTiposDocumentos;
     this.findEscalaUseCase = findEscalaUseCase;
+    this.crearReservaDetalleUseCase = crearReservaDetalleUseCase;
+    this.asignarsillaUseCase = asignarsillaUseCase;
   }
 
   public void consultar() throws SQLException {
@@ -77,7 +82,7 @@ public class VueloController {
     String Idvuelo = SeleccionarVuelo(vuelos);
     var yesOrNo = 0;
     bvuelo.setIdvuelo(Idvuelo);
-
+    int idDetalleReserva=0;
     List<Escala> escalas = findEscalaUseCase.execute(Integer.valueOf(Idvuelo));
 
     if (!escalas.isEmpty()) {
@@ -94,26 +99,43 @@ public class VueloController {
       }
     }
     int cantidadpsajeros= 0;
+    Asientosdetalles asientodetalle = new Asientosdetalles();
     while (yesOrNo == 0) {
-      crearReservaUseCase.execute(bvuelo);
+      int idReserva =crearReservaUseCase.execute(bvuelo);
       List<TipoDocumento> tipos = buscarTiposDocumentos.execute();
       Pasajero pasajero = verificarPasajero(tipos);
       System.out.println(pasajero.getIdTipoDocumento());
       System.out.println(pasajero.getDocumento());
-      verificarPasajero.execute(pasajero);
+      int idPasajero =verificarPasajero.execute(pasajero);
+      DetalleReserva detalleReserva = new DetalleReserva();
+
+      detalleReserva.setIdReserva(idReserva);
+      detalleReserva.setIdPasajero(idPasajero);
       cantidadpsajeros++;
+      idDetalleReserva= crearReservaDetalleUseCase.execute(detalleReserva);
+      detalleReserva.setId(idDetalleReserva);
       yesOrNo = JOptionPane.showConfirmDialog(null, "Desea agregar un nuevo pasajero?");
     }
     if (yesOrNo == 1) {
       JOptionPane.showMessageDialog(null, "Selecciona silla");
     }
+
+
+
     System.out.println("cantidad"+escalas.size());
-    String sillaseleccionada;
+    int sillaseleccionada;
+
+
+
+
     for (int i = 0; i < cantidadpsajeros; i++) {
       for (int j = 0; j < escalas.size(); j++) {
         
         sillaseleccionada=seleccionarSilla(escalas.get(j));
-
+        asientodetalle.setIdConexion(escalas.get(j).getId());
+        asientodetalle.setIdDetalleReserva(idDetalleReserva);
+        asientodetalle.setIdAsiento(sillaseleccionada);
+asignarsillaUseCase.execute(asientodetalle);
       }
     }
 
@@ -238,7 +260,7 @@ public class VueloController {
 
   }
 
-  public String seleccionarSilla(Escala escala) {
+  public int seleccionarSilla(Escala escala) {
     JPanel optionsPanel = new JPanel(new GridLayout(6, 15));
     optionsPanel.setOpaque(false);
     optionsPanel.setBackground(Color.black);
@@ -296,7 +318,7 @@ public class VueloController {
         }
       }
     }
-    return sillaseleccionada;
+    return Integer.parseInt(sillaseleccionada);
   }
 
   class BackgroundPanel extends JPanel {
