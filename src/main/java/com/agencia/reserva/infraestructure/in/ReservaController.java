@@ -3,17 +3,20 @@ package com.agencia.reserva.infraestructure.in;
 import java.util.Scanner;
 
 import com.agencia.reserva.application.CreateReservaAgenteUseCase;
+import com.agencia.reserva.application.DeleteReservaAgenteUseCase;
 import com.agencia.reserva.application.FindReservaAgenteUseCase;
 import com.agencia.reserva.domain.entity.Reserva;
 
 public class ReservaController {
     private final CreateReservaAgenteUseCase createReservaAgenteUseCase;
     private final FindReservaAgenteUseCase findReservaAgenteUseCase;
+    private final DeleteReservaAgenteUseCase deleteReservaAgenteUseCase;
 
     public ReservaController(CreateReservaAgenteUseCase createReservaAgenteUseCase,
-            FindReservaAgenteUseCase findReservaAgenteUseCase) {
+            FindReservaAgenteUseCase findReservaAgenteUseCase, DeleteReservaAgenteUseCase deleteReservaAgenteUseCase) {
         this.createReservaAgenteUseCase = createReservaAgenteUseCase;
         this.findReservaAgenteUseCase = findReservaAgenteUseCase;
+        this.deleteReservaAgenteUseCase= deleteReservaAgenteUseCase;
     }
 
     Scanner scanner = new Scanner(System.in);
@@ -36,9 +39,9 @@ public class ReservaController {
                 case 2:
                     findReservaAgente();
                     break;
-                // case 3:
-                // deleteTipoDocumento();
-                // break;
+                case 3:
+                    deleteReservaAgente();
+                break;
 
                 // case 4:
                 // findIdtipoDocumento();
@@ -88,6 +91,18 @@ public class ReservaController {
         } else {
             System.out.println("Reserva no encontrada");
         }
+
+    }
+    
+    public void deleteReservaAgente() {
+        System.out.println("ingrese id reserva eliminar");
+        int idReservaAgente = scanner.nextInt();
+        scanner.nextLine();
+
+        Reserva elimina = new Reserva();
+        elimina.setId(idReservaAgente);
+        deleteReservaAgenteUseCase.execute(elimina);
+        System.out.println("Reserva eliminada con éxito");
 
     }
 }
