@@ -126,6 +126,7 @@ public class Main {
                 case 6:
 
                     tripulacionController.gestionTripulacion();
+                    break;
                     
                 case 7:
 
