@@ -59,8 +59,14 @@ public class ReservaRepository implements ReservaServiceOlf {
 
     @Override
     public void deleteReservaAgente(Reserva reserva) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteReservaAgente'");
+        
+
     }
 
+    // @Override
+    // public Reserva findReservaAgente(int id) {
+    //     // String query ="SELECT r.id, r.fecha, v.precioviaje, v.idorigenaeropuerto, v.iddestinoaeropuerto +
+    //     // c.nombre, c.numerodocumento, r.estado from r reservaviaje inner join viajes v on v.id="
+        
+    // }
 }
