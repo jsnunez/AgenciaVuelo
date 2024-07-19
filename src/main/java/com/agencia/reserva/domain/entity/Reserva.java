@@ -1,24 +1,24 @@
 package com.agencia.reserva.domain.entity;
 
 public class Reserva {
-    private String id;
+    private int id;
     private String fechaReserva;
-    private String idVuelo;
-    private String idCliente;
+    private int idVuelo;
+    private int idCliente;
     private String estado;
     public Reserva() {
     }
-    public Reserva(String id, String fechaReserva, String idVuelo, String idCliente, String estado) {
+    public Reserva(int id, String fechaReserva, int idVuelo, int idCliente, String estado) {
         this.id = id;
         this.fechaReserva = fechaReserva;
         this.idVuelo = idVuelo;
         this.idCliente = idCliente;
         this.estado = estado;
     }
-    public String getId() {
+    public int getId() {
         return id;
     }
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
     public String getFechaReserva() {
@@ -27,16 +27,16 @@ public class Reserva {
     public void setFechaReserva(String fechaReserva) {
         this.fechaReserva = fechaReserva;
     }
-    public String getIdVuelo() {
+    public int getIdVuelo() {
         return idVuelo;
     }
-    public void setIdVuelo(String idVuelo) {
+    public void setIdVuelo(int idVuelo) {
         this.idVuelo = idVuelo;
     }
-    public String getIdCliente() {
+    public int getIdCliente() {
         return idCliente;
     }
-    public void setIdCliente(String idCliente) {
+    public void setIdCliente(int idCliente) {
         this.idCliente = idCliente;
     }
     public String getEstado() {
