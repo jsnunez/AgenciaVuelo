@@ -2,6 +2,8 @@ package com.agencia.reserva.infraestructure.out;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Properties;
 
 import com.agencia.reserva.domain.entity.Reserva;
@@ -31,7 +33,28 @@ public class ReservaRepository implements ReservaServiceOlf {
 
     @Override
     public void createReservaAgente(Reserva reserva) {
-        
+
+        try{
+            String query="INSERT INTO reservaviaje (fecha,idvuelos,idclientes,estado) VALUES (?,?,?,?)";
+            PreparedStatement ps=connection.prepareStatement(query,
+            PreparedStatement.RETURN_GENERATED_KEYS);
+            ps.setString(1,reserva.getFechaReserva());
+            ps.setInt(2,reserva.getIdVuelo());
+            ps.setInt(3,reserva.getIdCliente());
+            ps.setString(4,"Confirmada");
+
+            ps.executeUpdate();
+
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int id=generatedKeys.getInt(1);
+                    reserva.setId(id);
+                }
+            }
+    
+        }catch (Exception e){
+            e.printStackTrace();
+        }   
     }
 
     @Override
