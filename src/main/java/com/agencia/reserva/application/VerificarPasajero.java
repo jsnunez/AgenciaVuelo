@@ -10,7 +10,7 @@ public class VerificarPasajero {
         this.vueloService = vueloService;
     }
 
-    public void execute(Pasajero pasajero) {
-         vueloService.VerificarPasajero(pasajero);;
+    public int execute(Pasajero pasajero) {
+         return vueloService.VerificarPasajero(pasajero);
 }
 }
