@@ -17,6 +17,7 @@ public interface vueloService {
     void updatevuelo(vuelo vuelo);
     vuelo findvuelo(int id);
     void deletevuelo(int id);
+    void asignarsilla();
     List<Ciudad> findAllCiudades();
     int crearReserva(BuscarVuelo bVuelo);
     void VerificarPasajero(Pasajero pasajero);

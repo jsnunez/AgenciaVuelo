@@ -1,9 +1,6 @@
 package com.agencia.reserva.infraestructure.in;
 
 import java.awt.*;
-import java.awt.Color;
-import java.awt.GridLayout;
-import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -24,6 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import com.agencia.escala.application.FindEscalaUseCase;
+import com.agencia.escala.domain.entity.Escala;
 import com.agencia.reserva.application.BuscarCiudades;
 import com.agencia.reserva.application.BuscarTiposDocumentos;
 import com.agencia.reserva.application.BuscarvuelosUseCase;
@@ -38,26 +37,26 @@ import com.agencia.reserva.domain.entity.vuelo;
 import com.agencia.tipoDocumento.domain.entity.TipoDocumento;
 import com.toedter.calendar.JCalendar;
 
-public class vueloController {
+public class VueloController {
   private ConsultvueloUseCase consultvueloUseCase;
   private BuscarCiudades buscarCiudades;
-  private UpdatevueloUseCase updatevueloUseCase;
   private BuscarvuelosUseCase buscarvuelosUseCase;
   private CrearReservaUseCase crearReservaUseCase;
   private VerificarPasajero verificarPasajero;
   private BuscarTiposDocumentos buscarTiposDocumentos;
+  private FindEscalaUseCase findEscalaUseCase;
 
-  public vueloController(ConsultvueloUseCase consultvueloUseCase, BuscarCiudades buscarCiudades,
-      BuscarvuelosUseCase buscarvuelosUseCase,
-      CrearReservaUseCase crearReservaUseCase, VerificarPasajero verificarPasajero,
-      BuscarTiposDocumentos buscarTiposDocumentos) {
+  public VueloController(ConsultvueloUseCase consultvueloUseCase, BuscarCiudades buscarCiudades,
+      BuscarvuelosUseCase buscarvuelosUseCase, CrearReservaUseCase crearReservaUseCase,
+      VerificarPasajero verificarPasajero, BuscarTiposDocumentos buscarTiposDocumentos,
+      FindEscalaUseCase findEscalaUseCase) {
     this.consultvueloUseCase = consultvueloUseCase;
     this.buscarCiudades = buscarCiudades;
-    this.updatevueloUseCase = updatevueloUseCase;
     this.buscarvuelosUseCase = buscarvuelosUseCase;
     this.crearReservaUseCase = crearReservaUseCase;
     this.verificarPasajero = verificarPasajero;
     this.buscarTiposDocumentos = buscarTiposDocumentos;
+    this.findEscalaUseCase = findEscalaUseCase;
   }
 
   public void consultar() throws SQLException {
@@ -79,6 +78,22 @@ public class vueloController {
     var yesOrNo = 0;
     bvuelo.setIdvuelo(Idvuelo);
 
+    List<Escala> escalas = findEscalaUseCase.execute(Integer.valueOf(Idvuelo));
+
+    if (!escalas.isEmpty()) {
+      System.out.println(escalas);
+      // escalas.forEach(escala -> System.out.println(escala.getId()));
+
+      for (Escala escala : escalas) {
+        System.out.println("Escala id: " + escala.getId());
+        System.out.println("Número de conexión: " + escala.getNumeroConexion());
+        System.out.println("Id trayecto: " + escala.getIdViaje());
+        System.out.println("Id Avión: " + escala.getIdAvion());
+        System.out.println("Id aeropuerto: " + escala.getIdAeropuerto());
+        System.out.println("------------"); // Separador para mayor claridad
+      }
+    }
+    int cantidadpsajeros= 0;
     while (yesOrNo == 0) {
       crearReservaUseCase.execute(bvuelo);
       List<TipoDocumento> tipos = buscarTiposDocumentos.execute();
@@ -86,13 +101,21 @@ public class vueloController {
       System.out.println(pasajero.getIdTipoDocumento());
       System.out.println(pasajero.getDocumento());
       verificarPasajero.execute(pasajero);
+      cantidadpsajeros++;
       yesOrNo = JOptionPane.showConfirmDialog(null, "Desea agregar un nuevo pasajero?");
     }
     if (yesOrNo == 1) {
       JOptionPane.showMessageDialog(null, "Selecciona silla");
     }
+    System.out.println("cantidad"+escalas.size());
+    String sillaseleccionada;
+    for (int i = 0; i < cantidadpsajeros; i++) {
+      for (int j = 0; j < escalas.size(); j++) {
+        
+        sillaseleccionada=seleccionarSilla(escalas.get(j));
 
-    seleccionarSilla();
+      }
+    }
 
   }
 
@@ -209,26 +232,28 @@ public class vueloController {
     vuelo vuelo = new vuelo();
     BigDecimal valor = new BigDecimal(valorString);
     vuelo.setId(id);
-    updatevueloUseCase.execute(vuelo);
   }
 
   public void eliminar() throws SQLException {
 
   }
 
-  public String seleccionarSilla() {
+  public String seleccionarSilla(Escala escala) {
     JPanel optionsPanel = new JPanel(new GridLayout(6, 15));
     optionsPanel.setOpaque(false);
     optionsPanel.setBackground(Color.black);
     JRadioButton[][] options = new JRadioButton[6][20];
+
     ButtonGroup group = new ButtonGroup();
-    char c = 'A';
+    // char c = 'A';
     for (int row = 0; row < 6; row++) {
       for (int col = 0; col < 20; col++) {
 
-        options[row][col] = new JRadioButton(Character.toString(c) + (col + 1));
+        // options[row][col] = new JRadioButton(Character.toString(row+ 5) + (col + 1));
+                options[row][col] = new JRadioButton(Integer.toString(row * 10 + col + 1));
+
         // options[row][col].setOpaque(false);
-        options[row][col].setBackground(Color.gray);
+        options[row][col].setBackground(Color.gray); 
 
         options[row][col].setForeground(Color.green);
 
@@ -244,11 +269,13 @@ public class vueloController {
 
         }
       }
-      c++;
+      // c++;
     }
 
     // Crear el panel principal que contendrá el panel de opciones
     JPanel mainPanel = new JPanel(new BorderLayout(10, 10)); // Margen de 10 píxeles
+  
+
     mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Márgenes alrededor del panel principal
     mainPanel.setOpaque(false); // Hacer el panel principal transparente
     mainPanel.add(optionsPanel, BorderLayout.CENTER);
@@ -258,8 +285,8 @@ public class vueloController {
                                                                                                          // ruta a la
                                                                                                          // ruta de tu
                                                                                                          // imagen
-    JOptionPane.showMessageDialog(null, backgroundPanel, "Selecciona una opción", JOptionPane.PLAIN_MESSAGE);
-    String sillaseleccionada="";
+    JOptionPane.showMessageDialog(null, backgroundPanel, "Aeropuerto Salida:  "+escala.getIdAeropuerto(), JOptionPane.PLAIN_MESSAGE);
+    String sillaseleccionada = "";
     // Procesar la selección del usuario
     for (int row = 0; row < 6; row++) {
       for (int col = 0; col < 10; col++) {
