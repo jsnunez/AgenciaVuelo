@@ -1,6 +1,7 @@
 
 import java.util.Scanner;
 
+import com.agencia.reserva.application.CancelReservaClienteUseCase;
 import com.agencia.reserva.application.CreateReservaAgenteUseCase;
 import com.agencia.reserva.application.DeleteReservaAgenteUseCase;
 import com.agencia.reserva.application.FindReservaAgenteUseCase;
@@ -13,11 +14,14 @@ public class MainOlf {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        ReservaRepository reservaRepository=new ReservaRepository();        
+        ReservaRepository reservaRepository=new ReservaRepository();
+
         CreateReservaAgenteUseCase createReservaAgenteUseCase=new CreateReservaAgenteUseCase(reservaRepository);
         FindReservaAgenteUseCase findReservaAgenteUseCase=new FindReservaAgenteUseCase(reservaRepository); 
-        DeleteReservaAgenteUseCase deleteReservaAgenteUseCase=new DeleteReservaAgenteUseCase(reservaRepository);      
-        ReservaController reservaController= new ReservaController(createReservaAgenteUseCase,findReservaAgenteUseCase,deleteReservaAgenteUseCase);
+        DeleteReservaAgenteUseCase deleteReservaAgenteUseCase=new DeleteReservaAgenteUseCase(reservaRepository);   
+        CancelReservaClienteUseCase cancelReservaClienteUseCase=new  CancelReservaClienteUseCase(reservaRepository); 
+        ReservaController reservaController= new ReservaController(createReservaAgenteUseCase,findReservaAgenteUseCase,
+        deleteReservaAgenteUseCase,cancelReservaClienteUseCase);
         
         while (true) {
             System.out.println("1. Gestion Reserva");

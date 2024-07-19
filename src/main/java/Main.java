@@ -31,6 +31,7 @@ import com.agencia.trayecto.application.UpdateTrayectoUseCase;
 import com.agencia.trayecto.infraestructure.TrayectoController;
 import com.agencia.trayecto.infraestructure.TrayectoRepository;
 import com.agencia.tripulacion.application.CreateTripulacionUseCase;
+import com.agencia.tripulacion.application.FindTripulacionUseCase;
 import com.agencia.tripulacion.infraestructure.TripulacionController;
 import com.agencia.tripulacion.infraestructure.TripulacionRepository;
 
@@ -60,7 +61,8 @@ public class Main {
 
 
         CreateTripulacionUseCase createTripulacionUseCase = new CreateTripulacionUseCase(tripulacionRepository);
-        TripulacionController tripulacionController = new TripulacionController(createTripulacionUseCase);
+        FindTripulacionUseCase findTripulacionUseCase=new FindTripulacionUseCase(tripulacionRepository);
+        TripulacionController tripulacionController = new TripulacionController(createTripulacionUseCase, findTripulacionUseCase);
 
         AvionController avionController = new AvionController(createAvionUseCase, updateAvionUseCase, deleteAvionUseCase, findAvionUseCase);
         EscalaController escalaController = new EscalaController(findEscalaUseCase, updateEscalaUseCase, deleteEscalaUseCase, asignAvionUseCase);

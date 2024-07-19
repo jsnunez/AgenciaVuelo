@@ -2,6 +2,7 @@ package com.agencia.reserva.infraestructure.in;
 
 import java.util.Scanner;
 
+import com.agencia.reserva.application.CancelReservaClienteUseCase;
 import com.agencia.reserva.application.CreateReservaAgenteUseCase;
 import com.agencia.reserva.application.DeleteReservaAgenteUseCase;
 import com.agencia.reserva.application.FindReservaAgenteUseCase;
@@ -11,12 +12,16 @@ public class ReservaController {
     private final CreateReservaAgenteUseCase createReservaAgenteUseCase;
     private final FindReservaAgenteUseCase findReservaAgenteUseCase;
     private final DeleteReservaAgenteUseCase deleteReservaAgenteUseCase;
+    private final CancelReservaClienteUseCase cancelReservaClienteUseCase;
 
     public ReservaController(CreateReservaAgenteUseCase createReservaAgenteUseCase,
-            FindReservaAgenteUseCase findReservaAgenteUseCase, DeleteReservaAgenteUseCase deleteReservaAgenteUseCase) {
+            FindReservaAgenteUseCase findReservaAgenteUseCase, DeleteReservaAgenteUseCase deleteReservaAgenteUseCase,
+            CancelReservaClienteUseCase cancelReservaClienteUseCase) {
         this.createReservaAgenteUseCase = createReservaAgenteUseCase;
         this.findReservaAgenteUseCase = findReservaAgenteUseCase;
         this.deleteReservaAgenteUseCase= deleteReservaAgenteUseCase;
+        this.cancelReservaClienteUseCase = cancelReservaClienteUseCase;
+        
     }
 
     Scanner scanner = new Scanner(System.in);
@@ -43,9 +48,9 @@ public class ReservaController {
                     deleteReservaAgente();
                 break;
 
-                // case 4:
-                // findIdtipoDocumento();
-                // break;
+                case 4:
+                cancelarReserva();
+                break;
 
                 default:
                     break;
@@ -104,5 +109,33 @@ public class ReservaController {
         deleteReservaAgenteUseCase.execute(elimina);
         System.out.println("Reserva eliminada con éxito");
 
+    }
+    
+    public void cancelarReserva() {
+        System.out.println("ingrese id reserva cancelar");
+        int idReservaAgente = scanner.nextInt();
+        scanner.nextLine();
+        Reserva cancela = new Reserva();
+        Reserva reserva=findReservaAgenteUseCase.execute(idReservaAgente);
+        if (reserva != null) {
+            System.out.println("Detalles de la Reserva:");
+            System.out.println("ID: " + reserva.getId());
+            System.out.println("Fecha: " + reserva.getFechaReserva());
+            System.out.println("Aeropuerto Origen: " + reserva.getAeropuertoOrigen());
+            System.out.println("Aeropuerto Destino: " + reserva.getAeropuertoDestino());
+            System.out.println("Nombre Cliente: " + reserva.getNombreCliente());
+            System.out.println("Precio Vuelo: " + reserva.getPrecio());
+            System.out.println("Estado Reserva: " + reserva.getEstado());
+            System.out.println("¿Está seguro de que desea cancelar esta reserva? (S/N)");
+            String confirmacion = scanner.nextLine();
+            if (confirmacion.equalsIgnoreCase("S")) {
+                cancelReservaClienteUseCase.execute(reserva);
+            } else {
+                System.out.println("Cancelación de la reserva abortada.");
+            }
+        } else {
+            System.out.println("Reserva no encontrada.");
+        }
+        
     }
 }

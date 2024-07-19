@@ -4,20 +4,17 @@ import java.util.List;
 
 import com.agencia.reserva.domain.entity.Ciudad;
 import com.agencia.reserva.domain.entity.Asientosdetalles;
-
 import com.agencia.reserva.domain.service.vueloService;
 
-public class AsignarSillaUseCase {
+public class AsignarsillaUseCase {
     private final vueloService vueloService;
 
-    public AsignarSillaUseCase(com.agencia.reserva.domain.service.vueloService vueloService) {
+    public AsignarsillaUseCase(vueloService vueloService) {
         this.vueloService = vueloService;
     }
-  public  void execute(Asientosdetalles asientosdetalles)  {
-                
 
-    vueloService.asignarsilla(asientosdetalles);
-
+    public void execute(Asientosdetalles asientosdetalles) {
+        vueloService.asignarsilla(asientosdetalles);
         // vueloService.BuscarVuelo();
     }
 }

@@ -105,4 +105,35 @@ public class ReservaRepository implements ReservaServiceOlf {
         return reserva;
 
     }
+
+    @Override
+    public void cancelReservaCliente(Reserva reserva) {
+        String query= "UPDATE  reservaviaje SET estado=? WHERE id=?";
+        try (PreparedStatement ps=connection.prepareStatement(query)){
+            ps.setInt(2, reserva.getId());
+            ps.setString(1, "Cancelada");
+            ps.executeUpdate();
+            System.out.println("Reserva Cancelada con exito");
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+
+    }
+    // private boolean existeReserva(int id) {
+    //     String query = "SELECT COUNT(*) FROM reservaviaje WHERE id = ?";
+    //     try (PreparedStatement ps = connection.prepareStatement(query)) {
+    //         ps.setInt(1, id);
+    //         try (ResultSet rs = ps.executeQuery()) {
+    //             if (rs.next()) {
+    //                 return rs.getInt(1) > 0;
+    //             }
+    //         }
+    //     } catch (SQLException e) {
+    //         e.printStackTrace();
+    //     }
+    //     return false;
+    // }
+    
+    
 }
