@@ -37,7 +37,7 @@ import com.agencia.reserva.domain.entity.vuelo;
 import com.agencia.tipoDocumento.domain.entity.TipoDocumento;
 import com.toedter.calendar.JCalendar;
 
-public class VueloController {
+public class vueloController {
   private ConsultvueloUseCase consultvueloUseCase;
   private BuscarCiudades buscarCiudades;
   private BuscarvuelosUseCase buscarvuelosUseCase;
@@ -46,7 +46,7 @@ public class VueloController {
   private BuscarTiposDocumentos buscarTiposDocumentos;
   private FindEscalaUseCase findEscalaUseCase;
 
-  public VueloController(ConsultvueloUseCase consultvueloUseCase, BuscarCiudades buscarCiudades,
+  public vueloController(ConsultvueloUseCase consultvueloUseCase, BuscarCiudades buscarCiudades,
       BuscarvuelosUseCase buscarvuelosUseCase, CrearReservaUseCase crearReservaUseCase,
       VerificarPasajero verificarPasajero, BuscarTiposDocumentos buscarTiposDocumentos,
       FindEscalaUseCase findEscalaUseCase) {
