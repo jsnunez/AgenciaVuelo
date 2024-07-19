@@ -11,6 +11,7 @@ import com.agencia.reserva.application.BuscarSillasOcupadas;
 import com.agencia.reserva.application.BuscarTiposDocumentos;
 import com.agencia.reserva.application.BuscarvuelosUseCase;
 import com.agencia.reserva.application.ConsultvueloUseCase;
+import com.agencia.reserva.application.CrearPasajeroUseCase;
 import com.agencia.reserva.application.CrearReservaDetalleUseCase;
 import com.agencia.reserva.application.CrearReservaUseCase;
 import com.agencia.reserva.application.VerificarPasajero;
@@ -98,10 +99,11 @@ public class mainsebastian {
                     CrearReservaDetalleUseCase crearReservaDetalleUseCase = new CrearReservaDetalleUseCase(
                             vueloService);
                     BuscarSillasOcupadas buscarSillasOcupadas = new BuscarSillasOcupadas(vueloService);
+                    CrearPasajeroUseCase crearPasajeroUseCase = new CrearPasajeroUseCase(vueloService);
 
                     vueloController consoleAdapterVuelo = new vueloController(consultvueloUseCase, buscarCiudades,
                             buscarvuelosUseCase, crearReservaUseCase, verificarPasajero, buscarTiposDocumentos,
-                            findEscalaUseCase, crearReservaDetalleUseCase, asignarSillaUseCase, buscarSillasOcupadas);
+                            findEscalaUseCase, crearReservaDetalleUseCase, asignarSillaUseCase, buscarSillasOcupadas, crearPasajeroUseCase);
                     Object[] optionsVuelos = { "Consultar vuelos", "Buscar vuelo", "Seleccionar vuelo",
                             "Añadir pasajero", "Seleccionar asiento", " Salir" };
                     Object menuVuelos = JOptionPane.showInputDialog(null, "Seleccione Una Opcion",

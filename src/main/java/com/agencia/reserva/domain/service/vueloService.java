@@ -26,6 +26,7 @@ public interface vueloService {
     List<TipoDocumento> buscarTipoDocumento();
     int crearReservaDetalle(DetalleReserva detalleReserva);
     List<String> sillasVacias(int idConexion);
+    int crearPasajero(Pasajero pasajero);
 
 
 }

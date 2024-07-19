@@ -1,8 +1,5 @@
 package com.agencia.reserva.application;
 
-import java.util.List;
-
-import com.agencia.reserva.domain.entity.Ciudad;
 import com.agencia.reserva.domain.entity.Asientosdetalles;
 import com.agencia.reserva.domain.service.vueloService;
 

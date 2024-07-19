@@ -1,6 +1,5 @@
 package com.agencia.reserva.application;
 
-import com.agencia.reserva.domain.entity.BuscarVuelo;
 import com.agencia.reserva.domain.entity.DetalleReserva;
 import com.agencia.reserva.domain.service.vueloService;
 
