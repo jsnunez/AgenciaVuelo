@@ -24,11 +24,11 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public class vueloRepository implements vueloService {
+public class VueloRepository implements vueloService {
 
   private Connection connection;
 
-  public vueloRepository() {
+  public VueloRepository() {
     try {
       Properties props = new Properties();
       props.load(getClass().getClassLoader().getResourceAsStream("configdb.properties"));
@@ -513,5 +513,11 @@ public class vueloRepository implements vueloService {
     }
 
     return listTipoDocumento;
+  }
+
+  @Override
+  public void asignarsilla() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'asignarsilla'");
   }
 }
