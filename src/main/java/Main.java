@@ -30,6 +30,9 @@ import com.agencia.trayecto.application.FindTrayectoUseCase;
 import com.agencia.trayecto.application.UpdateTrayectoUseCase;
 import com.agencia.trayecto.infraestructure.TrayectoController;
 import com.agencia.trayecto.infraestructure.TrayectoRepository;
+import com.agencia.tripulacion.application.CreateTripulacionUseCase;
+import com.agencia.tripulacion.infraestructure.TripulacionController;
+import com.agencia.tripulacion.infraestructure.TripulacionRepository;
 
 public class Main {
     public static void main(String[] args) {
@@ -39,6 +42,7 @@ public class Main {
         TipoDocumentoRepository tipoDocumentoRepository=new TipoDocumentoRepository();
         EscalaRepository escalaRepository = new EscalaRepository();
         RevisionRepository revisionRepository = new RevisionRepository();
+        TripulacionRepository tripulacionRepository = new TripulacionRepository();
 
         FindAvionUseCase findAvionUseCase = new FindAvionUseCase(avionRepository);
         CreateAvionUseCase createAvionUseCase = new CreateAvionUseCase(avionRepository);
@@ -53,6 +57,10 @@ public class Main {
         CreateRevisionUseCase createRevisionUseCase = new CreateRevisionUseCase(revisionRepository);
         UpdateTrayectoUseCase updateTrayectoUseCase = new UpdateTrayectoUseCase(trayectoRepository);
         DeleteTrayectoUseCase deleteTrayectoUseCase = new DeleteTrayectoUseCase(trayectoRepository);
+
+
+        CreateTripulacionUseCase createTripulacionUseCase = new CreateTripulacionUseCase(tripulacionRepository);
+        TripulacionController tripulacionController = new TripulacionController(createTripulacionUseCase);
 
         AvionController avionController = new AvionController(createAvionUseCase, updateAvionUseCase, deleteAvionUseCase, findAvionUseCase);
         EscalaController escalaController = new EscalaController(findEscalaUseCase, updateEscalaUseCase, deleteEscalaUseCase, asignAvionUseCase);
@@ -76,6 +84,8 @@ public class Main {
             System.out.println("3. Gestion Escalas");
             System.out.println("4. Gestión tipo documento");
             System.out.println("5. Gestión revisión de mantenimiento de aviones");
+            System.out.println("6. Gestion de tripulantes");
+            System.out.println("7. Salir");
 
             int opcion = scanner.nextInt();
             scanner.nextLine(); // Consumir el salto de línea después de nextInt
@@ -86,36 +96,42 @@ public class Main {
                     avionController.gestionAvion();
 
                     break;
-
-                case 3: 
-                
-                    escalaController.gestionEscala();
-                    break;
-                
-
+                    
                 case 2: 
                 
                     trayectoController.gestionTrayecto();
+
+                    break;
+                    
+                case 3: 
                 
+                    escalaController.gestionEscala();
+
+                    break;
+
                 case 4:
                 
                     tipoDocumentoController.gestionTipoDocumento();
-                    break;
 
+                    break;
 
                 case 5:
+
                     revisionController.gestionRevision();
+
                     break;
-                    
 
                 case 6:
+
+                    tripulacionController.gestionTripulacion();
+                    
+                case 7:
 
                     System.out.println("Saliendo...");
                     scanner.close();
                     System.exit(0);
                     break;
                 
-
                 default:
                     System.out.println("Opción inválida");
                     break;
