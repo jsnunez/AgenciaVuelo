@@ -78,11 +78,14 @@ public class ReservaRepository implements ReservaServiceOlf {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     reserva = new Reserva();
-                    reserva.setId(rs.getInt("id"));
-                    reserva.setFechaReserva(rs.getString("fecha"));
-                    reserva.setIdVuelo(rs.getInt("idvuelos"));
-                    reserva.setIdCliente(rs.getInt("idclientes"));
-                    reserva.setEstado(rs.getString("estado"));
+                    reserva.setId(rs.getInt("r.id"));
+                    reserva.setFechaReserva(rs.getString("r.fecha"));
+                    reserva.setPrecio(rs.getInt("v.precioviaje"));
+                    reserva.setAeropuertoOrigen(rs.getString("v.idorigenaeropuerto"));
+                    reserva.setAeropuertoDestino(rs.getString("v.iddestinoaeropuerto"));
+                    reserva.setNombreCliente(rs.getString("c.nombre"));
+                    reserva.setNumeroDocumento(rs.getString("c.numerodocumento"));
+                    reserva.setEstado(rs.getString("r.estado"));
                 }
             }
         } catch (SQLException e) {

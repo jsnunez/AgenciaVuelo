@@ -79,8 +79,12 @@ public class ReservaController {
         if (reserva != null) {
             System.out.println("Id" + reserva.getId());
             System.out.println("Fecha: " + reserva.getFechaReserva());
-            System.out.println("Id Vuelo: " + reserva.getIdVuelo());
-            System.out.println("Id Cliente: " + reserva.getIdCliente());
+            System.out.println("Aeropuerto Origen"+ reserva.getAeropuertoOrigen());
+            System.out.println("Aeropuerto Destino: " + reserva.getAeropuertoDestino());
+            System.out.println("Nombre Cliente"+ reserva.getNombreCliente());
+            System.out.println("Precio Vuelo"+ reserva.getPrecio());
+            System.out.println("Estado Reserva "+ reserva.getEstado());
+            
         } else {
             System.out.println("Reserva no encontrada");
         }
