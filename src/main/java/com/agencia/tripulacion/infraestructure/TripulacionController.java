@@ -80,6 +80,11 @@ public class TripulacionController {
 
             Tripulacion findTripulacion = findTripulacionUseCase.execute(idEscala);
 
+            if (findTripulacion != null) {
+                System.out.println("El id del empleado: " + findTripulacion.getIdempleado());
+                System.out.println("El id de la escala es: " + findTripulacion.getIdconexion());
+            }
+
 
 
         }
