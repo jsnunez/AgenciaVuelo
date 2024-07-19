@@ -117,30 +117,32 @@ private BuscarSillasOcupadas buscarSillasOcupadas;
       cantidadpsajeros++;
       idDetalleReserva= crearReservaDetalleUseCase.execute(detalleReserva);
       detalleReserva.setId(idDetalleReserva);
+      System.out.println("cantidad"+escalas.size());
+      int sillaseleccionada;
+  
+  
+  
+      JOptionPane.showMessageDialog(null, "Selecciona silla");
+
+        for (int j = 0; j < escalas.size(); j++) {
+          
+          sillaseleccionada=seleccionarSilla(escalas.get(j));
+          asientodetalle.setIdConexion(escalas.get(j).getId());
+          asientodetalle.setIdDetalleReserva(idDetalleReserva);
+          asientodetalle.setIdAsiento(sillaseleccionada);
+  asignarsillaUseCase.execute(asientodetalle);
+        }
+      
       yesOrNo = JOptionPane.showConfirmDialog(null, "Desea agregar un nuevo pasajero?");
     }
-    if (yesOrNo == 1) {
-      JOptionPane.showMessageDialog(null, "Selecciona silla");
-    }
 
+      JOptionPane.showMessageDialog(null, "Entrando a pasarela de pago");
 
-
-    System.out.println("cantidad"+escalas.size());
-    int sillaseleccionada;
+    
 
 
 
 
-    for (int i = 0; i < cantidadpsajeros; i++) {
-      for (int j = 0; j < escalas.size(); j++) {
-        
-        sillaseleccionada=seleccionarSilla(escalas.get(j));
-        asientodetalle.setIdConexion(escalas.get(j).getId());
-        asientodetalle.setIdDetalleReserva(idDetalleReserva);
-        asientodetalle.setIdAsiento(sillaseleccionada);
-asignarsillaUseCase.execute(asientodetalle);
-      }
-    }
 
   }
 
