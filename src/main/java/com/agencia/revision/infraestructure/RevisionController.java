@@ -2,7 +2,6 @@ package com.agencia.revision.infraestructure;
 
 import java.util.Scanner;
 
-import com.agencia.avion.domain.entity.Avion;
 import com.agencia.revision.application.CreateRevisionUseCase;
 import com.agencia.revision.application.DeleteRevisionUseCase;
 import com.agencia.revision.application.FindRevisionUseCase;
@@ -46,9 +45,17 @@ public class RevisionController{
                     createRevision();
                     break;
 
+                case 2:
+                    deleteRevision();
+                    break;
+
 
                 case 3:
                     findRevision();
+                    break;
+
+                case 4:
+                    updateRevision();
                     break;
             }
         }
@@ -103,6 +110,58 @@ public class RevisionController{
         }
 
     }
+
+
+    public void updateRevision(){
+
+
+        System.out.println("Ingrese el id de la revisión que desea actualizar: ");
+        int revisionUpdate = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.println("Ingrese la nueva fecha de la revisión: ");
+        String nuevaFecha = scanner.nextLine();
+
+        System.out.println("Ingrese el nuevo ID del avión: ");
+        int nuevoAvion = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.println("Ingrese la nueva descripción de la revisión: ");
+        String nuevaDescripcion = scanner.nextLine();
+
+        System.out.println("Ingrese el nuevo ID del empleado: ");
+        int nuevoEmpleado = scanner.nextInt();
+
+        Revision newRevision = new Revision();
+
+        newRevision.setId(revisionUpdate);
+        newRevision.setFechaRevision(nuevaFecha);
+        newRevision.setIdAvion(nuevoAvion);
+        newRevision.setDescripcion(nuevaDescripcion);
+        newRevision.setIdEmpleado(nuevoEmpleado);
+
+        updateRevisionUseCase.execute(newRevision);
+
+    }
+
+
+    public void deleteRevision(){
+        System.out.println("Ingrese el id para eliminar la revisión: ");
+        int deleteRevision = scanner.nextInt();
+        scanner.nextLine();
+
+        deleteRevisionUseCase.execute(deleteRevision);
+
+        if(deleteRevisionUseCase != null){
+            System.out.println("Revisión eliminada");
+        }else{
+            System.out.println("Revisión no eliminada");
+        }
+    }
+
+
+
+
 
 
 

@@ -109,7 +109,40 @@ public class RevisionRepository implements RevisionService{
 
     @Override
     public void updateRevision(Revision revision) {
-        // TODO Auto-generated method stub
+
+        try{
+            String query = "UPDATE revisiones SET fecharevision = ?, idavion = ? WHERE id = ?";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, revision.getFechaRevision());
+            ps.setInt(2, revision.getIdAvion());
+            ps.setInt(3, revision.getId());
+
+            ps.executeUpdate();
+
+            System.out.println("Revisión actualizada con éxito");
+        }catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+
+        try{
+            String query = "UPDATE revisiondetalles SET descripcion = ?, idempleado = ? WHERE id = ?";
+            PreparedStatement ps = connection.prepareStatement(query);
+
+            ps.setString(1, revision.getDescripcion());
+            ps.setInt(2, revision.getIdEmpleado());
+            ps.setInt(3, revision.getId());
+
+            ps.executeUpdate();
+
+            System.out.println("!!!");
+        }catch (SQLException e) {
+            e.printStackTrace();
+
+        }       
+
+
+        
         
     }
 
@@ -128,6 +161,7 @@ public class RevisionRepository implements RevisionService{
             e.printStackTrace();
         }
         return null;
+
     }
 
     
