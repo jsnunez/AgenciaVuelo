@@ -92,8 +92,9 @@ public class EscalaController {
             System.out.println("Número de conexión: " + escala.getNumeroConexion());
             System.out.println("Id trayecto: " + escala.getIdViaje());
             System.out.println("Id Avión: " + escala.getIdAvion());
-            System.out.println("Id aeropuerto: " + escala.getIdAeropuerto());
-            System.out.println("------------"); // Separador para mayor claridad
+            System.out.println("Id aeropuerto origen: " + escala.getIdAeropuertoOrigen());
+            System.out.println("Id aeropuerto destino: " + escala.getIdAeropuertoDestino());
+            System.out.println("------------"); 
         }
     } else {
         System.out.println("No se encontraron escalas para el id de viaje proporcionado.");
@@ -111,14 +112,18 @@ public class EscalaController {
         int nuevoAvion = scanner.nextInt();
         scanner.nextLine();
 
-        System.out.println("Ingrese el nuevo id del aeropuerto");
-        String nuevoAeropuerto = scanner.nextLine();
+        System.out.println("Ingrese el nuevo id del aeropuerto origen");
+        String nuevoAeropuertoOrigen = scanner.nextLine();
+
+        System.out.println("Ingrese el nuevo id del aeropuerto destino");
+        String nuevoAeropuertoDestino = scanner.nextLine();
 
         Escala newEscala = new Escala();
 
         newEscala.setId(idEscalaUpdate);
         newEscala.setIdAvion(nuevoAvion);
-        newEscala.setIdAeropuerto(nuevoAeropuerto);
+        newEscala.setIdAeropuertoOrigen(nuevoAeropuertoOrigen);
+        newEscala.setIdAeropuertoDestino(nuevoAeropuertoDestino);
 
         updateEscalaUseCase.execute(newEscala);
 

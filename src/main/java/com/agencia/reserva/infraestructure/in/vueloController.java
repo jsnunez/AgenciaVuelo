@@ -89,7 +89,8 @@ public class vueloController {
         System.out.println("Número de conexión: " + escala.getNumeroConexion());
         System.out.println("Id trayecto: " + escala.getIdViaje());
         System.out.println("Id Avión: " + escala.getIdAvion());
-        System.out.println("Id aeropuerto: " + escala.getIdAeropuerto());
+        System.out.println("Id aeropuerto origen: " + escala.getIdAeropuertoOrigen());
+        System.out.println("Id aeropuerto destino: " + escala.getIdAeropuertoDestino());
         System.out.println("------------"); // Separador para mayor claridad
       }
     }
@@ -285,7 +286,7 @@ public class vueloController {
                                                                                                          // ruta a la
                                                                                                          // ruta de tu
                                                                                                          // imagen
-    JOptionPane.showMessageDialog(null, backgroundPanel, "Aeropuerto Salida:  "+escala.getIdAeropuerto(), JOptionPane.PLAIN_MESSAGE);
+    JOptionPane.showMessageDialog(null, backgroundPanel, "Aeropuerto Salida:  "+escala.getIdAeropuertoOrigen()+ "Aeropuerto Llegada:  "+escala.getIdAeropuertoDestino(), JOptionPane.PLAIN_MESSAGE);
     String sillaseleccionada = "";
     // Procesar la selección del usuario
     for (int row = 0; row < 6; row++) {

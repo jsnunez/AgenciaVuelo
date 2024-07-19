@@ -5,19 +5,22 @@ public class Escala {
     private String numeroConexion;
     private int idViaje;
     private int idAvion;
-    private String idAeropuerto;
+    private String idAeropuertoOrigen;
+    private String idAeropuertoDestino;
 
-    
+
     public Escala() {
     }
 
 
-    public Escala(int id, String numeroConexion, int idViaje, int idAvion, String idAeropuerto) {
+    public Escala(int id, String numeroConexion, int idViaje, int idAvion, String idAeropuertoOrigen,
+            String idAeropuertoDestino) {
         this.id = id;
         this.numeroConexion = numeroConexion;
         this.idViaje = idViaje;
         this.idAvion = idAvion;
-        this.idAeropuerto = idAeropuerto;
+        this.idAeropuertoOrigen = idAeropuertoOrigen;
+        this.idAeropuertoDestino = idAeropuertoDestino;
     }
 
 
@@ -61,13 +64,26 @@ public class Escala {
     }
 
 
-    public String getIdAeropuerto() {
-        return idAeropuerto;
+    public String getIdAeropuertoOrigen() {
+        return idAeropuertoOrigen;
     }
 
 
-    public void setIdAeropuerto(String idAeropuerto) {
-        this.idAeropuerto = idAeropuerto;
-    } 
+    public void setIdAeropuertoOrigen(String idAeropuertoOrigen) {
+        this.idAeropuertoOrigen = idAeropuertoOrigen;
+    }
+
+
+    public String getIdAeropuertoDestino() {
+        return idAeropuertoDestino;
+    }
+
+
+    public void setIdAeropuertoDestino(String idAeropuertoDestino) {
+        this.idAeropuertoDestino = idAeropuertoDestino;
+    }
+
+
+    
 
 }
