@@ -54,17 +54,18 @@ public class RevisionRepository implements RevisionService{
         }
 
         try{
-            String query= "INSERT INTO revisiondetalles (descripcion, idempleado) VALUES (?,?)";
+            String query= "INSERT INTO revisiondetalles (idrevision, descripcion, idempleado) VALUES (?,?,?)";
             PreparedStatement ps=connection.prepareStatement(query,
             PreparedStatement.RETURN_GENERATED_KEYS);
+            ps.setInt(1,revision.getId());
 
-            ps.setString(1,revision.getDescripcion());
-            ps.setInt(2,revision.getIdEmpleado());
+            ps.setString(2,revision.getDescripcion());
+            ps.setInt(3,revision.getIdEmpleado());
 
             ps.executeUpdate();
             try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    revision.setId(generatedKeys.getInt(1));
+                    revision.setIdRevisionDetalle(generatedKeys.getInt(1));
                 }
             }
         }catch(SQLException e){
@@ -75,22 +76,58 @@ public class RevisionRepository implements RevisionService{
 
     }
 
-    @Override
-    public void deleteRevision(int id) {
-        // TODO Auto-generated method stub
-        
-    }
+    
 
     @Override
     public Revision findRevision(int id) {
-        // TODO Auto-generated method stub
-        return null;
+        String query = "SELECT r.id, r.fecharevision, r.idavion, r2.descripcion, r2.idempleado "+ 
+        " FROM revisiones r INNER JOIN revisiondetalles r2 " +
+        " ON r.id = r2.idrevision INNER JOIN empleados e ON r2.idempleado = e.id WHERE r.id = ?";
+        Revision revision = null;
+        
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    revision = new Revision();
+                    revision.setId(rs.getInt("r.id"));
+                    revision.setFechaRevision(rs.getString("r.fecharevision"));
+                    revision.setIdAvion(rs.getInt("r.idavion"));
+                    revision.setDescripcion(rs.getString("r2.descripcion"));
+                    revision.setIdEmpleado(rs.getInt("r2.idempleado"));
+        
+                
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return revision;
     }
 
     @Override
     public void updateRevision(Revision revision) {
         // TODO Auto-generated method stub
         
+    }
+
+     @Override
+    public Revision deleteRevision(int id) {
+
+        String query = "Delete FROM revisiones WHERE id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
+
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     

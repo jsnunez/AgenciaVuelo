@@ -14,6 +14,9 @@ import com.agencia.escala.application.UpdateEscalaUseCase;
 import com.agencia.escala.infraestructure.EscalaController;
 import com.agencia.escala.infraestructure.EscalaRepository;
 import com.agencia.revision.application.CreateRevisionUseCase;
+import com.agencia.revision.application.DeleteRevisionUseCase;
+import com.agencia.revision.application.FindRevisionUseCase;
+import com.agencia.revision.application.UpdateRevisionUseCase;
 import com.agencia.revision.infraestructure.RevisionController;
 import com.agencia.revision.infraestructure.RevisionRepository;
 import com.agencia.tipoDocumento.application.CreateTipoDocumentoUseCase;
@@ -55,7 +58,11 @@ public class Main {
         EscalaController escalaController = new EscalaController(findEscalaUseCase, updateEscalaUseCase, deleteEscalaUseCase, asignAvionUseCase);
         FindTrayectoUseCase findTrayectoUseCase = new FindTrayectoUseCase(trayectoRepository);
         TrayectoController trayectoController = new TrayectoController(findTrayectoUseCase,updateTrayectoUseCase,deleteTrayectoUseCase); 
-        RevisionController revisionController = new RevisionController(createRevisionUseCase);
+        
+        FindRevisionUseCase findRevisionUseCase = new FindRevisionUseCase(revisionRepository);
+        UpdateRevisionUseCase updateRevisionUseCase = new UpdateRevisionUseCase(revisionRepository);
+        DeleteRevisionUseCase deleteRevisionUseCase = new DeleteRevisionUseCase(revisionRepository);
+        RevisionController revisionController = new RevisionController(createRevisionUseCase, updateRevisionUseCase, findRevisionUseCase, deleteRevisionUseCase);
 
         CreateTipoDocumentoUseCase createTipoDocumentoUseCase=new CreateTipoDocumentoUseCase(tipoDocumentoRepository);
         UpdateTipoDocumentoUseCase updateTipoDocumentoUseCase=new UpdateTipoDocumentoUseCase(tipoDocumentoRepository);

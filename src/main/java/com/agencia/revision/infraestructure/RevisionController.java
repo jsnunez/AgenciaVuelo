@@ -2,14 +2,27 @@ package com.agencia.revision.infraestructure;
 
 import java.util.Scanner;
 
+import com.agencia.avion.domain.entity.Avion;
 import com.agencia.revision.application.CreateRevisionUseCase;
+import com.agencia.revision.application.DeleteRevisionUseCase;
+import com.agencia.revision.application.FindRevisionUseCase;
+import com.agencia.revision.application.UpdateRevisionUseCase;
 import com.agencia.revision.domain.entity.Revision;
 
 public class RevisionController{
     private final CreateRevisionUseCase createRevisionUseCase;
+    private final UpdateRevisionUseCase updateRevisionUseCase;
+    private final FindRevisionUseCase findRevisionUseCase;
+    private final DeleteRevisionUseCase deleteRevisionUseCase;
 
-    public RevisionController(CreateRevisionUseCase createRevisionUseCase){
+    
+
+    public RevisionController(CreateRevisionUseCase createRevisionUseCase, UpdateRevisionUseCase updateRevisionUseCase, FindRevisionUseCase findRevisionUseCase, DeleteRevisionUseCase deleteRevisionUseCase) {
         this.createRevisionUseCase = createRevisionUseCase;
+        this.updateRevisionUseCase = updateRevisionUseCase;
+        this.findRevisionUseCase = findRevisionUseCase;
+        this.deleteRevisionUseCase = deleteRevisionUseCase;
+
     }
 
     Scanner scanner = new Scanner(System.in);
@@ -31,6 +44,11 @@ public class RevisionController{
                 case 1:
 
                     createRevision();
+                    break;
+
+
+                case 3:
+                    findRevision();
                     break;
             }
         }
@@ -61,6 +79,28 @@ public class RevisionController{
 
         createRevisionUseCase.execute(revision);
         System.out.println("Revision creada exitosamente. ");
+
+    }
+
+    public void findRevision(){
+
+        System.out.println("Cuál es el id de la revisión que desea consultar: ");
+        int idRevision = scanner.nextInt();
+        scanner.nextLine();
+
+        Revision foundRevision = findRevisionUseCase.execute(idRevision);
+
+        if(foundRevision != null){
+            System.out.println("Revision id: " + foundRevision.getId());
+            System.out.println("Fecha revisión: " + foundRevision.getFechaRevision());
+            System.out.println("ID Avión: " + foundRevision.getIdAvion());
+            System.out.println("Descripción de la revisión: " + foundRevision.getDescripcion());
+            System.out.println("ID empleado encargado: " + foundRevision.getIdEmpleado());
+           
+        }
+        else{
+            System.out.println("Revisión no encontrada c:");
+        }
 
     }
 
