@@ -2,6 +2,7 @@
 import java.util.Scanner;
 
 import com.agencia.reserva.application.CreateReservaAgenteUseCase;
+import com.agencia.reserva.application.FindReservaAgenteUseCase;
 import com.agencia.reserva.infraestructure.in.ReservaController;
 import com.agencia.reserva.infraestructure.out.ReservaRepository;
 
@@ -12,8 +13,9 @@ public class MainOlf {
         Scanner scanner = new Scanner(System.in);
 
         ReservaRepository reservaRepository=new ReservaRepository();        
-        CreateReservaAgenteUseCase createReservaAgenteUseCase=new CreateReservaAgenteUseCase(reservaRepository);        
-        ReservaController reservaController= new ReservaController(createReservaAgenteUseCase);
+        CreateReservaAgenteUseCase createReservaAgenteUseCase=new CreateReservaAgenteUseCase(reservaRepository);
+        FindReservaAgenteUseCase findReservaAgenteUseCase=new FindReservaAgenteUseCase(reservaRepository);       
+        ReservaController reservaController= new ReservaController(createReservaAgenteUseCase,findReservaAgenteUseCase);
         
         while (true) {
             System.out.println("1. Gestion Reserva");

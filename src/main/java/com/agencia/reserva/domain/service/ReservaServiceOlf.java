@@ -6,6 +6,6 @@ import com.agencia.tipoDocumento.domain.entity.TipoDocumento;
 public interface ReservaServiceOlf {
     void createReservaAgente (Reserva reserva);
     void deleteReservaAgente (Reserva reserva);
-   // Reserva findReservaAgente(int id);
+    Reserva findReservaAgente(int id);
 
 }

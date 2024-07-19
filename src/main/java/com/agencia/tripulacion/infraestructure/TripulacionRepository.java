@@ -3,6 +3,7 @@ package com.agencia.tripulacion.infraestructure;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -49,12 +50,25 @@ public class TripulacionRepository implements TripulacionService{
     }
 
     @Override 
-    public void findTripulacion (int id){
+    public Tripulacion findTripulacion (int id){
         
         String query = "SELECT idempleado, idconexion FROM tripulantes WHERE idconexion = ?";
         Tripulacion tripulacion = null;
 
-        
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, id);
+            try(ResultSet rs = ps.executeQuery()){
+                if (rs.next()) {
+                    tripulacion = new Tripulacion();
+                    tripulacion.setIdempleado(rs.getInt("idempleado"));
+                    tripulacion.setIdconexion(rs.getInt("idconexion"));
+                }
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return tripulacion; 
 
     }
 

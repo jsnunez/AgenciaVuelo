@@ -3,14 +3,17 @@ package com.agencia.tripulacion.infraestructure;
 import java.util.Scanner;
 
 import com.agencia.tripulacion.application.CreateTripulacionUseCase;
+import com.agencia.tripulacion.application.FindTripulacionUseCase;
 import com.agencia.tripulacion.domain.entity.Tripulacion;
 
 public class TripulacionController {
 
     private final CreateTripulacionUseCase createTripulacionUseCase;
+    private final FindTripulacionUseCase findTripulacionUseCase;
 
-    public TripulacionController(CreateTripulacionUseCase createTripulacionUseCase){
+    public TripulacionController(CreateTripulacionUseCase createTripulacionUseCase, FindTripulacionUseCase findTripulacionUseCase){
         this.createTripulacionUseCase = createTripulacionUseCase;
+        this.findTripulacionUseCase = findTripulacionUseCase;
     }
 
     Scanner scanner = new Scanner(System.in);
@@ -32,6 +35,10 @@ public class TripulacionController {
                     createTripulacion();
                     
                     break;
+
+                case 2:
+
+                    findTripulacion();
             
                 case 3: 
 
@@ -61,6 +68,19 @@ public class TripulacionController {
 
             createTripulacionUseCase.execute(tripulacion);
             System.out.println("Tripulante creado correctamente <3");
+
+        }
+
+
+        public void findTripulacion(){
+
+            System.out.println("Cuál es el id de la escala: ");
+            int idEscala = scanner.nextInt();
+            scanner.nextLine();
+
+            Tripulacion findTripulacion = findTripulacionUseCase.execute(idEscala);
+
+
 
         }
 
