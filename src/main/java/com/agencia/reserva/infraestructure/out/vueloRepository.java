@@ -562,4 +562,25 @@ public class vueloRepository implements vueloService {
 
     return generatedId;
  }
-}
+
+  @Override
+  public List<String> sillasVacias(int idConexion) {
+    List<String> listasillas = new ArrayList<>();
+    String sql = "                        SELECT idasientos FROM asientodetallereservaviajeconexion WHERE idconexionvuelos = ?;";
+    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+      statement.setInt(1, idConexion);
+
+      try (ResultSet resultSet = statement.executeQuery()) {
+        while (resultSet.next()) {
+          String silla = resultSet.getString("idasientos");
+          listasillas.add(silla);
+          System.out.println(silla);
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return listasillas;
+  }}

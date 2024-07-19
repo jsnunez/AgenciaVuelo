@@ -43,26 +43,28 @@ public class vueloController {
   private FindEscalaUseCase findEscalaUseCase;
   private CrearReservaDetalleUseCase crearReservaDetalleUseCase;
   private AsignarsillaUseCase asignarsillaUseCase;
-
+private BuscarSillasOcupadas buscarSillasOcupadas;
 
 
   
 
+
   public vueloController(ConsultvueloUseCase consultvueloUseCase, BuscarCiudades buscarCiudades,
-      BuscarvuelosUseCase buscarvuelosUseCase, CrearReservaUseCase crearReservaUseCase,
-      VerificarPasajero verificarPasajero, BuscarTiposDocumentos buscarTiposDocumentos,
-      FindEscalaUseCase findEscalaUseCase, CrearReservaDetalleUseCase crearReservaDetalleUseCase,
-      AsignarsillaUseCase asignarsillaUseCase) {
-    this.consultvueloUseCase = consultvueloUseCase;
-    this.buscarCiudades = buscarCiudades;
-    this.buscarvuelosUseCase = buscarvuelosUseCase;
-    this.crearReservaUseCase = crearReservaUseCase;
-    this.verificarPasajero = verificarPasajero;
-    this.buscarTiposDocumentos = buscarTiposDocumentos;
-    this.findEscalaUseCase = findEscalaUseCase;
-    this.crearReservaDetalleUseCase = crearReservaDetalleUseCase;
-    this.asignarsillaUseCase = asignarsillaUseCase;
-  }
+    BuscarvuelosUseCase buscarvuelosUseCase, CrearReservaUseCase crearReservaUseCase,
+    VerificarPasajero verificarPasajero, BuscarTiposDocumentos buscarTiposDocumentos,
+    FindEscalaUseCase findEscalaUseCase, CrearReservaDetalleUseCase crearReservaDetalleUseCase,
+    AsignarsillaUseCase asignarsillaUseCase, BuscarSillasOcupadas buscarSillasOcupadas) {
+  this.consultvueloUseCase = consultvueloUseCase;
+  this.buscarCiudades = buscarCiudades;
+  this.buscarvuelosUseCase = buscarvuelosUseCase;
+  this.crearReservaUseCase = crearReservaUseCase;
+  this.verificarPasajero = verificarPasajero;
+  this.buscarTiposDocumentos = buscarTiposDocumentos;
+  this.findEscalaUseCase = findEscalaUseCase;
+  this.crearReservaDetalleUseCase = crearReservaDetalleUseCase;
+  this.asignarsillaUseCase = asignarsillaUseCase;
+  this.buscarSillasOcupadas = buscarSillasOcupadas;
+}
 
   public void consultar() throws SQLException {
     String idString = JOptionPane.showInputDialog("Ingrese ID vuelo");
@@ -262,65 +264,74 @@ asignarsillaUseCase.execute(asientodetalle);
   }
 
   public int seleccionarSilla(Escala escala) {
-    JPanel optionsPanel = new JPanel(new GridLayout(6, 15));
+    JPanel optionsPanel = new JPanel(new GridLayout(6, 20)); // 6 filas y 20 columnas
     optionsPanel.setOpaque(false);
     optionsPanel.setBackground(Color.black);
     JRadioButton[][] options = new JRadioButton[6][20];
+    List<String> listaOcupadas = buscarSillasOcupadas.execute(escala.getId());
 
     ButtonGroup group = new ButtonGroup();
-    // char c = 'A';
+
     for (int row = 0; row < 6; row++) {
-      for (int col = 0; col < 20; col++) {
+        for (int col = 0; col < 20; col++) {
+            options[row][col] = new JRadioButton(Integer.toString(row * 20 + col + 1));
+            options[row][col].setBackground(Color.gray);
+            options[row][col].setForeground(Color.green);
 
-        // options[row][col] = new JRadioButton(Character.toString(row+ 5) + (col + 1));
-                options[row][col] = new JRadioButton(Integer.toString(row * 10 + col + 1));
+            group.add(options[row][col]);
+            optionsPanel.add(options[row][col]);
 
-        // options[row][col].setOpaque(false);
-        options[row][col].setBackground(Color.gray); 
+            for (String silla : listaOcupadas) {
+                int numsilla = Integer.parseInt(silla);
+                int fila = (numsilla - 1) / 20;
+                int columna = (numsilla - 1) % 20;
 
-        options[row][col].setForeground(Color.green);
-
-        group.add(options[row][col]);
-        optionsPanel.add(options[row][col]);
-
-        if (row == 0 && col == 9) {
-
-          options[row][col].setEnabled(false);
-          options[row][col].setOpaque(true);
-
-          // options[row][col].setBackground(Color.red);
-
+                if (row == fila && col == columna) {
+                    options[row][col].setEnabled(false);
+                    options[row][col].setOpaque(true);
+                }
+            }
         }
-      }
-      // c++;
     }
 
-    // Crear el panel principal que contendrá el panel de opciones
-    JPanel mainPanel = new JPanel(new BorderLayout(10, 10)); // Margen de 10 píxeles
-  
-
-    mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Márgenes alrededor del panel principal
-    mainPanel.setOpaque(false); // Hacer el panel principal transparente
+    JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+    mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+    mainPanel.setOpaque(false);
     mainPanel.add(optionsPanel, BorderLayout.CENTER);
 
-    // Crear el cuadro de diálogo con un panel de fondo con imagen
-    BackgroundPanel backgroundPanel = new BackgroundPanel(mainPanel, "src\\main\\resources\\avion.png"); // Cambia esta
-                                                                                                         // ruta a la
-                                                                                                         // ruta de tu
-                                                                                                         // imagen
-    JOptionPane.showMessageDialog(null, backgroundPanel, "Aeropuerto Salida:  "+escala.getIdAeropuertoOrigen()+ "Aeropuerto Llegada:  "+escala.getIdAeropuertoDestino(), JOptionPane.PLAIN_MESSAGE);
+    BackgroundPanel backgroundPanel = new BackgroundPanel(mainPanel, "src\\main\\resources\\avion.png");
+    JOptionPane.showMessageDialog(null, backgroundPanel, "Aeropuerto Salida: " + escala.getIdAeropuertoOrigen()
+            + " Aeropuerto Llegada: " + escala.getIdAeropuertoDestino(), JOptionPane.PLAIN_MESSAGE);
+
     String sillaseleccionada = "";
-    // Procesar la selección del usuario
+    boolean asientoSeleccionado = false;
+
     for (int row = 0; row < 6; row++) {
-      for (int col = 0; col < 10; col++) {
-        if (options[row][col].isSelected()) {
-          sillaseleccionada = options[row][col].getText();
-          System.out.println("Seleccionaste: " + options[row][col].getText());
+        for (int col = 0; col < 20; col++) {
+            if (options[row][col].isSelected()) {
+                sillaseleccionada = options[row][col].getText();
+                asientoSeleccionado = true;
+                System.out.println("Seleccionaste: " + sillaseleccionada);
+                break;
+            }
         }
-      }
+        if (asientoSeleccionado) {
+            break;
+        }
     }
-    return Integer.parseInt(sillaseleccionada);
-  }
+
+    if (!asientoSeleccionado) {
+        System.out.println("No seleccionaste sillas.");
+        return -1; // o cualquier otro valor por defecto para indicar que no se hizo una selección
+    }
+
+    try {
+        return Integer.parseInt(sillaseleccionada);
+    } catch (NumberFormatException e) {
+        System.out.println("Invalid seat selection: " + sillaseleccionada);
+        return -1; // o cualquier otro valor por defecto para indicar una entrada inválida
+    }
+}
 
   class BackgroundPanel extends JPanel {
     private Image backgroundImage;
