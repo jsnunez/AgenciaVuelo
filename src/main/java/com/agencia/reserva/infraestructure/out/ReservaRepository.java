@@ -61,8 +61,19 @@ public class ReservaRepository implements ReservaServiceOlf {
 
     @Override
     public void deleteReservaAgente(Reserva reserva) {
+        String query= "DELETE FROM reservaviaje where id=?" ;
+        try (PreparedStatement ps=connection.prepareStatement(query)){
+            ps.setInt(1, reserva.getId());
+            ps.executeUpdate();
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+           
 
     }
+
+    
 
     @Override
     public Reserva findReservaAgente(int id) {
